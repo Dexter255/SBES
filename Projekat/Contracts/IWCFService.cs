@@ -22,12 +22,12 @@ namespace Contracts
 
 
         [OperationContract]
-        bool View();
+        String ViewAll();
         [OperationContract]
-        bool View(bool tf);
+        String ViewMaxPayed(bool tf);
         [OperationContract]
-        bool View(String city, short fromAge, short toAge);
+        double AverageSalaryByCityAndAge(String city, short fromAge, short toAge);
         [OperationContract]
-        bool View(String country, String payDay);
+        double AverageSalaryByCountryAndPayday(String country, String payDay);
     }
 }

@@ -19,44 +19,44 @@ namespace Client
             factory = this.CreateChannel();
         }
 
+        public double AverageSalaryByCityAndAge(string city, short fromAge, short toAge)
+        {
+            return factory.AverageSalaryByCityAndAge(city, fromAge, toAge);
+        }
+
+        public double AverageSalaryByCountryAndPayday(string country, string payDay)
+        {
+            return factory.AverageSalaryByCountryAndPayday(country, payDay);
+        }
+
         public bool CreateDatabase(string filename)
         {
-            throw new NotImplementedException();
+            return factory.CreateDatabase(filename);
         }
 
         public bool DeleteDatabase(string filename)
         {
-            throw new NotImplementedException();
+            return factory.DeleteDatabase(filename);
         }
 
         public bool Edit(int id, string country, string city, short age, double salary, string payDay)
         {
-            throw new NotImplementedException();
+            return factory.Edit(id, country, city, age, salary, payDay);
         }
 
-        public bool Insert(String country, String city, short age, double salary, String payDay)
+        public bool Insert(string country, string city, short age, double salary, string payDay)
         {
-            throw new NotImplementedException();
+            return factory.Insert(country, city, age, salary, payDay);
         }
 
-        public bool View()
+        public string ViewAll()
         {
-            throw new NotImplementedException();
+            return factory.ViewAll();
         }
 
-        public bool View(bool tf)
+        public string ViewMaxPayed(bool tf)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool View(string city, short fromAge, short toAge)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool View(string country, string payDay)
-        {
-            throw new NotImplementedException();
+            return factory.ViewMaxPayed(tf);
         }
     }
 }

@@ -33,28 +33,28 @@ namespace Service
             return true;
         }
 
-        public bool View()
+        public String ViewAll()
         {
-            Console.WriteLine("View1 succeeded");
-            return true;
+            Console.WriteLine("ViewAll() succeeded");
+            return "ASD" + Environment.NewLine;
         }
 
-        public bool View(bool tf)
+        public String ViewMaxPayed(bool tf)
         {
-            Console.WriteLine("View2 succeeded");
-            return true;
+            Console.WriteLine("ViewMaxPayed() succeeded");
+            return "asd" + Environment.NewLine;
         }
 
-        public bool View(string city, short fromAge, short toAge)
+        public double AverageSalaryByCityAndAge(String city, short fromAge, short toAge)
         {
-            Console.WriteLine("View3 succeeded");
-            return true;
+            Console.WriteLine("AverageSalaryByCityAndAge() succeeded");
+            return 5.00;
         }
 
-        public bool View(string country, string payDay)
+        public double AverageSalaryByCountryAndPayday(String country, String payDay)
         {
-            Console.WriteLine("View4 succeeded");
-            return true;
+            Console.WriteLine("AverageSalaryByCountryAndPayday() succeeded");
+            return 1.00;
         }
     }
 }

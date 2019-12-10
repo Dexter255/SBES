@@ -21,10 +21,10 @@ namespace Client
                 proxy.DeleteDatabase("baza1");
                 proxy.Insert("SRB", "Novi Sad", 18, 256.24, "2019");
                 proxy.Edit(1, "SRB", "Novi Sad", 18, 256.24, "2019");
-                proxy.View();
-                proxy.View(true);
-                proxy.View("Novi Sad", 18, 24);
-                proxy.View("SRB", "2019");
+                proxy.ViewAll();
+                proxy.ViewMaxPayed(true);
+                proxy.AverageSalaryByCityAndAge("Novi Sad", 18, 24);
+                proxy.AverageSalaryByCountryAndPayday("SRB", "2019");
             }
 
             Console.ReadLine();
