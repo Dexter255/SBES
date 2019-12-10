@@ -11,3 +11,10 @@ Autorizacija - RBAC
 Logger
 Digitalno potpisivanje poruka - klijent kada salje serveru, upis i modifikacija
 Kriptovanje AES, mod CBC - prilikom citanja iz baze podataka
+
+
+
+-----------------------------------------------------------------------------------------
+
+
+
