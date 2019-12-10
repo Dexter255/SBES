@@ -1,0 +1,13 @@
+Baza podataka - XML 
+	1. id
+	2. drzava
+	3. grad
+	4. starost
+	5. mesecna primanja
+
+Kreiranje sertifikata
+Autentifikacija - pomocu sertifikata
+Autorizacija - RBAC
+Logger
+Digitalno potpisivanje poruka - klijent kada salje serveru, upis i modifikacija
+Kriptovanje AES, mod CBC - prilikom citanja iz baze podataka
