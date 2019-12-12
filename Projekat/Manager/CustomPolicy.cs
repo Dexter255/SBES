@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Policy;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace Manager
 
         public bool Evaluate(EvaluationContext evaluationContext, ref object state)
         {
+            //Debugger.Launch();
             // podesava se custom principal i prosledjuje se WindowsIdentity
 
             object obj;

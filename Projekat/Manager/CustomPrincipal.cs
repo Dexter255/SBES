@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,26 +25,18 @@ namespace Manager
 
         public bool IsInRole(string permission)
         {
-            return true;
-            /*object obj;
+            //Debugger.Launch();
+            // CN=userAdmin, OU=Admins; 0B3E48F7BFA77954809DF79E5D3E295D96CF888C
+            string groupName = identity.Name.Split(',', ';')[1].Split('=')[1];
 
-            foreach (var group in (identity as WindowsIdentity).Groups)
+            string permissions = RBACConfig.ResourceManager.GetString(groupName);
+
+            if (permissions.Contains(permission))
             {
-                string groupName = Formatter.ParseName(group.Translate(typeof(NTAccount)).ToString());
-                obj = ConfigFile.ResourceManager.GetObject(groupName);
-
-                if (obj != null)
-                {
-                    string[] permissions = (obj as string).Split(',');
-
-                    foreach (var permission1 in permissions)
-                    {
-                        if (permission1 == permission)
-                            return true;
-                    }
-                }
+                return true;
             }
-            return false;*/
+
+            return false;
         }
     }
 }
