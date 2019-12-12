@@ -1,7 +1,10 @@
 ﻿using Contracts;
+using Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.ServiceModel.Security;
 using System.Text;
@@ -16,7 +19,18 @@ namespace Client
         public WCFClient(NetTcpBinding binding, EndpointAddress address)
             : base(binding, address)
         {
+
+            //uzimam windows naziv korisnika koji je pokrenuo ovo i dobijem nesto tipa xxx\userAdmin i formater mi vrati userAdmin
+            String clientCertificateCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+
+            //podesavamo u channel factory da mod validacije bude chaintrust i da se revokacija ne proverava (da li je sertifikat povucen -> NoCheck)
+            this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.ChainTrust;
+            this.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
+            
+            //postavljam i svoj sertifikat (client)
+            this.Credentials.ClientCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, clientCertificateCN);
             factory = this.CreateChannel();
+
         }
 
         public double AverageSalaryByCityAndAge(string city, short fromAge, short toAge)

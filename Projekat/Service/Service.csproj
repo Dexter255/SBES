@@ -56,6 +56,10 @@
       <Project>{A2FE278C-A0D6-421F-931C-1F7D79750DB6}</Project>
       <Name>Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Manager\Manager.csproj">
+      <Project>{a632fbe0-3cb4-4498-8fb4-772f71e13f71}</Project>
+      <Name>Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

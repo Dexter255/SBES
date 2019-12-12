@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Manager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +14,19 @@ namespace Client
     {
         static void Main(string[] args)
         {
+            //naziv serverovog .cer sertifikata
+            String serverCertificateCN = "wcfService";
             NetTcpBinding binding = new NetTcpBinding();
+            //setujem da se autentifikacija radi uz pomoc sertifikata
+            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
+            //kupim sertifikat iz storage-a sa tim serverskim nazivom
+            X509Certificate2 serverCertificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverCertificateCN);
+            //adresa za konekciju sa serverom
             string address = "net.tcp://localhost:9999/WCFService";
+            //kreiramo endpoint i setujemo mu sertifikat
+            EndpointAddress endpointAddress = new EndpointAddress(new Uri(address), new X509CertificateEndpointIdentity(serverCertificate));
 
-            using (WCFClient proxy = new WCFClient(binding, new EndpointAddress(new Uri(address))))
+            using (WCFClient proxy = new WCFClient(binding, endpointAddress))
             {
                 proxy.CreateDatabase("baza1");
                 proxy.DeleteDatabase("baza1");
