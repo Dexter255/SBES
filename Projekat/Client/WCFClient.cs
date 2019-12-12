@@ -35,52 +35,52 @@ namespace Client
         }
 
         #region Admin's permissions
-        public bool CreateDatabase(string filename)
+        public bool CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             try
             {
-                return factory.CreateDatabase(filename);
+                return factory.CreateDatabase(databaseName);
             }
             // ovo baca kod CheckAccessCore u okviru AuthorizationManager-a klase ukoliko korisnik nema dozvolu
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to create database: " + e.Message);
+                Console.WriteLine("\nError while trying to create database: " + e.Message + Environment.NewLine);
                 return false;
             }
             // ovo baca svaka metode u okviru WCFService klase 
             catch(FaultException e)
             {
-                Console.WriteLine("Error while trying to create database: " + e.Message);
+                Console.WriteLine("\nError while trying to create database: " + e.Message);
                 return false;
             }
         }
 
-        public bool DeleteDatabase(string filename)
+        public bool DeleteDatabase(string databaseName)
         {
             try
             {
-                return factory.DeleteDatabase(filename);
+                return factory.DeleteDatabase(databaseName);
             }
             catch(SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to delete database: " + e.Message);
+                Console.WriteLine("\nError while trying to delete database: " + e.Message + Environment.NewLine);
                 return false;
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to delete database: " + e.Message);
+                Console.WriteLine("\nError while trying to delete database: " + e.Message);
                 return false;
             }
         }
         #endregion
 
         #region Modifier's permissions
-        public bool Edit(int id, string country, string city, short age, double salary, string payDay)
+        public bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay)
         {
             try
             {
-                return factory.Edit(id, country, city, age, salary, payDay);
+                return factory.Edit(databaseName, id, country, city, age, salary, payDay);
             }
             catch (SecurityAccessDeniedException e)
             {
@@ -94,11 +94,11 @@ namespace Client
             }
         }
 
-        public bool Insert(string country, string city, short age, double salary, string payDay)
+        public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
         {
             try
             {
-                return factory.Insert(country, city, age, salary, payDay);
+                return factory.Insert(databaseName, country, city, age, salary, payDay);
             }
             catch (SecurityAccessDeniedException e)
             {
@@ -114,74 +114,74 @@ namespace Client
         #endregion
 
         #region Viewer's permissions
-        public double AverageSalaryByCityAndAge(string city, short fromAge, short toAge)
+        public double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
             try
             {
-                return factory.AverageSalaryByCityAndAge(city, fromAge, toAge);
+                return factory.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to get average salary by city and age from database: " + e.Message);
+                Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message + Environment.NewLine);
                 return -1;
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to get average salary by city and age from database: " + e.Message);
-                return -1;
-            }
-        }
-
-        public double AverageSalaryByCountryAndPayday(string country, string payDay)
-        {
-            try
-            {
-                return factory.AverageSalaryByCountryAndPayday(country, payDay);
-            }
-            catch (SecurityAccessDeniedException e)
-            {
-                Console.WriteLine("Error while trying to get average salary by country and payday from database: " + e.Message);
-                return -1;
-            }
-            catch (FaultException e)
-            {
-                Console.WriteLine("Error while trying to get average salary by country and payday from database: " + e.Message);
+                Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message);
                 return -1;
             }
         }
 
-        public string ViewAll()
+        public double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
             try
             {
-                return factory.ViewAll();
+                return factory.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to get all entities from database: " + e.Message);
+                Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message + Environment.NewLine);
+                return -1;
+            }
+            catch (FaultException e)
+            {
+                Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message);
+                return -1;
+            }
+        }
+
+        public string ViewAll(string databaseName)
+        {
+            try
+            {
+                return factory.ViewAll(databaseName);
+            }
+            catch (SecurityAccessDeniedException e)
+            {
+                Console.WriteLine("\nError while trying to get all entities from database: " + e.Message + Environment.NewLine);
                 return "";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to get all entities from database: " + e.Message);
+                Console.WriteLine("\nError while trying to get all entities from database: " + e.Message);
                 return "";
             }
         }
 
-        public string ViewMaxPayed(bool tf)
+        public string ViewMaxPayed(string databaseName, bool tf)
         {
             try
             {
-                return factory.ViewMaxPayed(tf);
+                return factory.ViewMaxPayed(databaseName, tf);
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to get max salary from all states: " + e.Message);
+                Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message + Environment.NewLine);
                 return "";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to get max salary from all states: " + e.Message);
+                Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message);
                 return "";
             }
         }

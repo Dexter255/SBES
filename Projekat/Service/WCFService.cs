@@ -16,7 +16,7 @@ namespace Service
     public class WCFService : IWCFService
     {
         #region Admin's permissions
-        public bool CreateDatabase(string filename)
+        public bool CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
@@ -27,11 +27,11 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
 
-        public bool DeleteDatabase(string filename)
+        public bool DeleteDatabase(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
@@ -41,13 +41,13 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
         #endregion
 
         #region Modifier's permissions
-        public bool Edit(int id, string country, string city, short age, double salary, string payDay)
+        public bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay)
         {
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
@@ -57,11 +57,11 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
 
-        public bool Insert(string country, string city, short age, double salary, string payDay)
+        public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
         {
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
@@ -71,13 +71,13 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
         #endregion
 
         #region Viewer's permissions
-        public String ViewAll()
+        public String ViewAll(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -87,11 +87,11 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
 
-        public String ViewMaxPayed(bool tf)
+        public String ViewMaxPayed(string databaseName, bool tf)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -101,11 +101,11 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
 
-        public double AverageSalaryByCityAndAge(String city, short fromAge, short toAge)
+        public double AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -115,11 +115,11 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
 
-        public double AverageSalaryByCountryAndPayday(String country, String payDay)
+        public double AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -129,7 +129,7 @@ namespace Service
             else
             {
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized."));
+                    new FaultReason("Not authorized.\n"));
             }
         }
         #endregion

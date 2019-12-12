@@ -12,27 +12,27 @@ namespace Contracts
     {
         #region Admin's permissions
         [OperationContract]
-        bool CreateDatabase(string filename);
+        bool CreateDatabase(string databaseName);
         [OperationContract]
-        bool DeleteDatabase(string filename);
+        bool DeleteDatabase(string databaseName);
         #endregion
 
         #region Modifier's permissions
         [OperationContract]
-        bool Edit(int id, string country, string city, short age, double salary, string payDay);
+        bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay);
         [OperationContract]
-        bool Insert(string country, string city, short age, double salary, string payDay);
+        bool Insert(string databaseName, string country, string city, short age, double salary, string payDay);
         #endregion
 
         #region Viewer's permission
         [OperationContract]
-        string ViewAll();
+        string ViewAll(string databaseName);
         [OperationContract]
-        string ViewMaxPayed(bool tf);
+        string ViewMaxPayed(string databaseName, bool tf);
         [OperationContract]
-        double AverageSalaryByCityAndAge(string city, short fromAge, short toAge);
+        double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
         [OperationContract]
-        double AverageSalaryByCountryAndPayday(string country, string payDay);
+        double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
         #endregion
     }
 
