@@ -2,10 +2,12 @@
 using Manager;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Policy;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.ServiceModel.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +33,15 @@ namespace Service
             serviceHost.Credentials.ClientCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             serviceHost.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
             serviceHost.Credentials.ServiceCertificate.Certificate = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, serviceCertificateCN);
+
+            serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
+            serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
+
+            //serviceHost.Authorization.ServiceAuthorizationManager = new AuthorizationManager();
+            serviceHost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.Custom;
+            List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>();
+            policies.Add(new CustomPolicy());
+            serviceHost.Authorization.ExternalAuthorizationPolicies = policies.AsReadOnly();
 
             serviceHost.Open();
             Console.WriteLine("WCFService is opened. Press <enter> to finish...");

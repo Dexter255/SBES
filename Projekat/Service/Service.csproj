@@ -58,7 +58,7 @@
       <Name>Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Manager\Manager.csproj">
-      <Project>{a632fbe0-3cb4-4498-8fb4-772f71e13f71}</Project>
+      <Project>{A632FBE0-3CB4-4498-8FB4-772F71E13F71}</Project>
       <Name>Manager</Name>
     </ProjectReference>
   </ItemGroup>
