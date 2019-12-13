@@ -4,43 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography;
+using Contracts;
 
 namespace Manager
 {
     public class DigitalSignature
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"> a message/text to be digitally signed </param>
-        /// <param name="hashAlgorithm"> an arbitrary hash algorithm </param>
-        /// <param name="certificate"> certificate of a user who creates a signature </param>
-        /// <returns> byte array representing a digital signature for the given message </returns>
-        public static byte[] Create(string message, string hashAlgorithm, X509Certificate2 certificate)
+        public static byte[] Create(string message, X509Certificate2 certificate)
         {
-            RSACryptoServiceProvider csp = null;
-
-            /// hash the message using SHA-1 (assume that "hashAlgorithm" is SHA-1)
+            // entity se hash-uje SHA1 algoritmom
             SHA1Managed sha1 = new SHA1Managed();
+            byte[] hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(message));
 
+            RSACryptoServiceProvider csp = certificate.PrivateKey as RSACryptoServiceProvider;
+            byte[] signature = csp.SignHash(hash, CryptoConfig.MapNameToOID("SHA1"));
 
-            /// Use RSACryptoServiceProvider support to create a signature using a previously created hash value
-            byte[] signature = new byte[] { };
             return signature;
         }
 
 
-        public static bool Verify(string message, string hashAlgorithm, byte[] signature, X509Certificate2 certificate)
+        public static bool Verify(string message, byte[] signature, X509Certificate2 certificate)
         {
-            RSACryptoServiceProvider csp = null;
-
-            /// hash the message using SHA-1 (assume that "hashAlgorithm" is SHA-1)
             SHA1Managed sha1 = new SHA1Managed();
 
+            byte[] hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(message));
 
-            /// Use RSACryptoServiceProvider support to compare two - hash value from signature and newly created hash value
-            bool isValid = false;
-            return isValid;
+            RSACryptoServiceProvider csp = certificate.PublicKey.Key as RSACryptoServiceProvider;
+
+            return csp.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA1"), signature);
         }
     }
 }

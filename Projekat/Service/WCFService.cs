@@ -91,7 +91,7 @@ namespace Service
             }
         }
 
-        public String ViewMaxPayed(string databaseName, bool tf)
+        public String ViewMaxPayed(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {

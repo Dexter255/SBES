@@ -80,6 +80,12 @@ namespace Client
         {
             try
             {
+                //Debugger.Launch();
+                string message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payDay}:{id}";
+                byte[] signature = DigitalSignature.Create(message, this.Credentials.ClientCertificate.Certificate);
+
+                //return factory.Edit(message, signature);
+
                 return factory.Edit(databaseName, id, country, city, age, salary, payDay);
             }
             catch (SecurityAccessDeniedException e)
@@ -98,6 +104,11 @@ namespace Client
         {
             try
             {
+                string message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payDay}";
+                byte[] signature = DigitalSignature.Create(message, this.Credentials.ClientCertificate.Certificate);
+
+                //return factory.Insert(message, signature);
+
                 return factory.Insert(databaseName, country, city, age, salary, payDay);
             }
             catch (SecurityAccessDeniedException e)
@@ -159,30 +170,30 @@ namespace Client
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get all entities from database: " + e.Message + Environment.NewLine);
-                return "";
+                return "-1";
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get all entities from database: " + e.Message);
-                return "";
+                return "-1";
             }
         }
 
-        public string ViewMaxPayed(string databaseName, bool tf)
+        public string ViewMaxPayed(string databaseName)
         {
             try
             {
-                return factory.ViewMaxPayed(databaseName, tf);
+                return factory.ViewMaxPayed(databaseName);
             }
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message + Environment.NewLine);
-                return "";
+                return "-1";
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message);
-                return "";
+                return "-1";
             }
         }
         #endregion
