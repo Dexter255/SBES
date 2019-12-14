@@ -157,7 +157,7 @@ namespace Service
             throw new NotImplementedException();
         }
 
-        public string ViewMaxPayed(string databaseName, bool tf)
+        public string ViewMaxPayed(string databaseName)
         {
             throw new NotImplementedException();
         }

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ErrorType.cs" />
+    <Compile Include="Information.cs" />
     <Compile Include="IWCFService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

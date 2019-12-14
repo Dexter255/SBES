@@ -107,7 +107,7 @@ namespace Service
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
 
-                return db.ViewMaxPayed(databaseName, tf);
+                return db.ViewMaxPayed(databaseName);
 
             }
             else
