@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Manager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,13 +7,17 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
 namespace Service
 {
+
 
     public class WCFDatabase : IWCFService
     {
@@ -55,7 +60,7 @@ namespace Service
 
                 //dodajemo nazive baza u pomocnu listu da ih sacuvamo u fajlu
                 databaseNames.Add(kvp.Key);
-                
+
                 //za svaku bazu, napunimo je njenim podacima i to snimimo u fajl nakon fora
                 tempdataitems = new List<Information>();
 
@@ -111,56 +116,106 @@ namespace Service
         #endregion
 
 
-        public bool CreateDatabase(string databaseName)
+        public string CreateDatabase(string databaseName)
         {
-            //Debugger.Launch();
             if (!DbList.ContainsKey(databaseName))
             {
                 DbList.Add(databaseName, new Dictionary<int, Information>());
                 //SerializeData();
-                return true;
+                return "Database successfully created.\n";
             }
-            return false;
+            return $"Database with name '{databaseName}' already exists.\n";
         }
 
-        public bool DeleteDatabase(string databaseName)
+        public string DeleteDatabase(string databaseName)
         {
             if (DbList.ContainsKey(databaseName))
             {
                 DbList.Remove(databaseName);
-                return true;
+                return "Database successfully deleted.\n";
             }
-            return false;
+            return $"Database with name '{databaseName}' doesn't exists.\n";
         }
 
-        public bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay)
-        {
-            if(DbList.ContainsKey(databaseName) && DbList[databaseName].ContainsKey(id))
-            {
-                DbList[databaseName][id].Drzava = country;
-                DbList[databaseName][id].Grad = city;
-                DbList[databaseName][id].Starost = age;
-                DbList[databaseName][id].MesecnaPrimanja = salary;
-                DbList[databaseName][id].Year = payDay;
-                //SerializeData();
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
+        public string Edit(string message, byte[] signature)
         {
             //Debugger.Launch();
-            if (DbList.ContainsKey(databaseName))
+            // CN=userModifier, OU=Modifiers; 9755AE1E112121811EE2DC67B7CF696CB7F69727
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
+            if (DigitalSignature.Verify(message, signature, certificate))
             {
-                Information info = new Information() { Drzava = country, Grad = city, Starost = age, MesecnaPrimanja = salary, Year = payDay };
-                DbList[databaseName].Add(info.Id, info);
-                //SerializeData();
-                return true;
+                // message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payday}:{id}"
+                // parts[0] - databaseName
+                // parts[1] - country
+                // parts[2] - city
+                // parts[3] - age
+                // parts[4] - salary
+                // parts[5] - payday
+                // parts[6] - id
+                string[] parts = message.Split(':');
+                int id = Int32.Parse(parts[6]);
+
+                if (DbList.ContainsKey(parts[0]))
+                {
+                    if (DbList[parts[0]].ContainsKey(id))
+                    {
+                        DbList[parts[0]][id].Drzava = parts[1];
+                        DbList[parts[0]][id].Grad = parts[2];
+                        DbList[parts[0]][id].Starost = short.Parse(parts[3]);
+                        DbList[parts[0]][id].MesecnaPrimanja = Double.Parse(parts[4]);
+                        DbList[parts[0]][id].Year = parts[5];
+                        //SerializeData();
+                        return "Existing entity successfully edited.\n";
+                    }
+                    else
+                    {
+                        return $"Entity with id '{id}' doesn't exists.\n";
+                    }
+                }
+                else
+                {
+                    return $"Database with name '{parts[0]}' doesn't exists.\n";
+                }
             }
 
-            return false;
+            return $"Message was changed by interceptor.\n";
+        }
+
+        public string Insert(string message, byte[] signature)
+        {
+            // CN=userModifier, OU=Modifiers; 9755AE1E112121811EE2DC67B7CF696CB7F69727
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
+            if (DigitalSignature.Verify(message, signature, certificate))
+            {
+                // message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payday}"
+                // parts[0] - databaseName
+                // parts[1] - country
+                // parts[2] - city
+                // parts[3] - age
+                // parts[4] - salary
+                // parts[5] - payday
+                string[] parts = message.Split(':');
+                int id = Int32.Parse(parts[6]);
+
+                if (DbList.ContainsKey(parts[0]))
+                {
+                    Information info = new Information() { Drzava = parts[1], Grad = parts[2], Starost = short.Parse(parts[3]), MesecnaPrimanja = Double.Parse(parts[4]), Year = parts[5] };
+                    DbList[parts[0]].Add(info.Id, info);
+                    return "New entity successfully inserted.\n";
+                }
+                else
+                {
+                    return $"Database with name '{parts[0]}' doesn't exists.\n";
+                }
+            }
+
+            return $"Message was changed by interceptor.\n";
         }
 
         public string ViewAll(string databaseName)
