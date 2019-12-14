@@ -45,54 +45,187 @@ namespace Client
         private static void SelectOption(WCFClient proxy, string option)
         {
             string databaseName = String.Empty;
+            string returnedValueString = String.Empty;
+            string city = String.Empty;
+            string country = String.Empty;
+            string payday = String.Empty;
+            string temp = String.Empty;
+            bool successfull = false;
+            double returnedValueDouble;
+            double salary;
+            short fromAge;
+            short toAge;
 
+            if(option != "9")
+            {
+                Console.Write("\nEnter database name: ");
+                databaseName = Console.ReadLine();
+            }
+
+            // povratna vrednost f-ja bi trebala biti int (enum)
+            // -1 za exception
+            // 0 za neuspesno - kada vec postoji/nepostoji baza podataka sa prosledjenim imenom 
+            // 1 za uspesno
             switch (option)
             {
                 case "1":
-                    Console.Write("\nEnter database name: ");
-                    databaseName = Console.ReadLine();
-
-                    bool successfull = proxy.CreateDatabase(databaseName);
+                    // -2 = za exception
+                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
+                    // 1 (uspesno)
+                    successfull = proxy.CreateDatabase(databaseName);
                     if (successfull)
                         Console.WriteLine("Database successfully created.\n");
-                    else if(!successfull)
-                        Console.WriteLine($"Database with name {databaseName} already exists.\n");
+                    else
+                        Console.WriteLine($"Database with name '{databaseName}' already exists.\n");
 
                     break;
 
                 case "2":
-                    Console.Write("\nEnter database name: ");
-                    databaseName = Console.ReadLine();
-
-                    if (proxy.DeleteDatabase(databaseName))
+                    // -2 = za exception
+                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
+                    // 1 (uspesno)
+                    successfull = proxy.DeleteDatabase(databaseName);
+                    if (successfull)
                         Console.WriteLine("Database successfully deleted.\n");
                     else
-                        Console.WriteLine($"Database with name {databaseName} doesn't exists.\n");
+                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
 
                     break;
 
                 case "3":
-                    proxy.Insert(databaseName, "SRB", "Novi Sad", 18, 256.24, "2019");
+                    Console.Write("Country: ");
+                    country = Console.ReadLine();
+
+                    Console.Write("City: ");
+                    city = Console.ReadLine();
+
+                    do
+                    {
+                        Console.Write("Age: ");
+                        temp = Console.ReadLine();
+                    } while (!short.TryParse(temp, out fromAge));
+
+                    do
+                    {
+                        Console.Write("Salary: ");
+                        temp = Console.ReadLine();
+                    } while (!Double.TryParse(temp, out salary));
+
+                    do
+                    {
+                        Console.Write("Payday: ");
+                        payday = Console.ReadLine();
+                    } while (!Int32.TryParse(payday, out int pay));
+
+                    // -2 = za exception
+                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
+                    // 1 (uspesno)
+                    successfull = proxy.Insert(databaseName, country, city, fromAge, salary, payday);
+                    if (successfull)
+                        Console.WriteLine("New entity successfully inserted.\n");
+                    else
+                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
+
                     break;
 
                 case "4":
-                    proxy.Edit(databaseName, 1, "SRB", "Novi Sad", 18, 256.24, "2019");
+                    int id;
+                    do
+                    {
+                        Console.Write("ID: ");
+                    } while (!Int32.TryParse(Console.ReadLine(), out id));
+
+                    Console.Write("Country: ");
+                    country = Console.ReadLine();
+
+                    Console.Write("City: ");
+                    city = Console.ReadLine();
+
+                    do
+                    {
+                        Console.Write("Age: ");
+                        temp = Console.ReadLine();
+                    } while (!short.TryParse(temp, out fromAge));
+
+                    do
+                    {
+                        Console.Write("Salary: ");
+                        temp = Console.ReadLine();
+                    } while (!Double.TryParse(temp, out salary));
+
+                    do
+                    {
+                        Console.Write("Payday: ");
+                        payday = Console.ReadLine();
+                    } while (!Int32.TryParse(payday, out int pay));
+
+                    // -2 = za exception
+                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
+                    // 0 (neuspesno) = id ne postoji
+                    // 1 (uspesno)
+                    successfull = proxy.Edit(databaseName, id, country, city, fromAge, salary, payday);
+                    if (successfull)
+                        Console.WriteLine("Existing entity successfully edited.\n");
+                    else /*if*/
+                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
+                    /*else if
+                        Console.WriteLine($"Entity with id '{id}' doesn't exists.\n");*/
+
                     break;
 
                 case "5":
-                    proxy.ViewAll(databaseName);
+                    returnedValueString = proxy.ViewAll(databaseName);
+                    if (returnedValueString != "-1")
+                        Console.WriteLine($"Entities: \n{returnedValueString}\n");
+
                     break;
 
                 case "6":
-                    proxy.ViewMaxPayed(databaseName, true);
+                    returnedValueString = proxy.ViewMaxPayed(databaseName);
+                    if (returnedValueString != "-1")
+                        Console.WriteLine($"Max salary from all states: \n{returnedValueString}\n");
+
                     break;
 
                 case "7":
-                    proxy.AverageSalaryByCountryAndPayday(databaseName, "SRB", "2019");
+                    Console.Write("Country: ");
+                    country = Console.ReadLine();
+
+                    do
+                    {
+                        Console.Write("Payday: ");
+                        payday = Console.ReadLine();
+                    } while (!Int32.TryParse(payday, out id));
+
+                    returnedValueDouble = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
+                    if (returnedValueDouble != -1)
+                        Console.WriteLine($"Avarage salary by country and payday: {returnedValueDouble}\n");
+
                     break;
 
                 case "8":
-                    proxy.AverageSalaryByCityAndAge(databaseName, "Novi Sad", 18, 24);
+                    Console.Write("City: ");
+                    city = Console.ReadLine();
+
+                    do
+                    {
+                        do
+                        {
+                            Console.Write("From age: ");
+                            temp = Console.ReadLine();
+                        } while (!short.TryParse(temp, out fromAge));
+
+                        do
+                        {
+                            Console.Write("To age: ");
+                            temp = Console.ReadLine();
+                        } while (!short.TryParse(temp, out toAge));
+                    } while (fromAge > toAge);
+                    
+                    returnedValueDouble = proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
+                    if (returnedValueDouble != -1)
+                        Console.WriteLine($"Avarage salary by city and age: {returnedValueDouble}\n");
+
                     break;
 
                 case "9":

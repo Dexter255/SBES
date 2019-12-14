@@ -28,7 +28,7 @@ namespace Contracts
         [OperationContract]
         string ViewAll(string databaseName);
         [OperationContract]
-        string ViewMaxPayed(string databaseName, bool tf);
+        string ViewMaxPayed(string databaseName);
         [OperationContract]
         double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
         [OperationContract]

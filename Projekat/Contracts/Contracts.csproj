@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Information.cs" />
+    <Compile Include="ErrorType.cs" />
     <Compile Include="IWCFService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
