@@ -22,7 +22,7 @@ namespace Service
         }
 
         #region Admin's permissions
-        public bool CreateDatabase(string databaseName)
+        public string CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
@@ -38,7 +38,7 @@ namespace Service
             }
         }
 
-        public bool DeleteDatabase(string databaseName)
+        public string DeleteDatabase(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
@@ -55,12 +55,12 @@ namespace Service
         #endregion
 
         #region Modifier's permissions
-        public bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay)
+        public string Edit(string message, byte[] signature)
         {
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
 
-                return db.Edit(databaseName, id, country, city, age, salary, payDay);
+                return db.Edit(message, signature);
 
             }
             else
@@ -70,12 +70,12 @@ namespace Service
             }
         }
 
-        public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
+        public string Insert(string message, byte[] signature)
         {
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
 
-                return db.Insert(databaseName, country, city, age, salary, payDay);
+                return db.Insert(message, signature);
                
             }
             else

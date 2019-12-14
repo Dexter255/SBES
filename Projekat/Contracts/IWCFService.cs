@@ -12,16 +12,16 @@ namespace Contracts
     {
         #region Admin's permissions
         [OperationContract]
-        bool CreateDatabase(string databaseName);
+        string CreateDatabase(string databaseName);
         [OperationContract]
-        bool DeleteDatabase(string databaseName);
+        string DeleteDatabase(string databaseName);
         #endregion
 
         #region Modifier's permissions
         [OperationContract]
-        bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay);
+        string Edit(string message, byte[] signature);
         [OperationContract]
-        bool Insert(string databaseName, string country, string city, short age, double salary, string payDay);
+        string Insert(string message, byte[] signature);
         #endregion
 
         #region Viewer's permission

@@ -1,4 +1,5 @@
-﻿using Manager;
+﻿using Contracts;
+using Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +35,14 @@ namespace Client
                 {
                     PrintMenu();
                     option = Console.ReadLine();
-                    SelectOption(proxy, option);
+
+                    if (Int32.TryParse(option, out int opt) && option != "9")
+                        SelectOption(proxy, option);
+
                 } while (option != "9");
             }
 
-            Console.WriteLine("\nPress any key to exit.");
+            Console.Write("\nPress any key to exit.");
             Console.ReadLine();
         }
 
@@ -50,126 +54,46 @@ namespace Client
             string country = String.Empty;
             string payday = String.Empty;
             string temp = String.Empty;
-            bool successfull = false;
+            string message = String.Empty;
+            byte[] signature;
             double returnedValueDouble;
-            double salary;
             short fromAge;
             short toAge;
 
-            if(option != "9")
-            {
-                Console.Write("\nEnter database name: ");
-                databaseName = Console.ReadLine();
-            }
+            Console.Write("\nEnter database name: ");
+            databaseName = Console.ReadLine();
 
-            // povratna vrednost f-ja bi trebala biti int (enum)
-            // -1 za exception
-            // 0 za neuspesno - kada vec postoji/nepostoji baza podataka sa prosledjenim imenom 
-            // 1 za uspesno
             switch (option)
             {
                 case "1":
-                    // -2 = za exception
-                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
-                    // 1 (uspesno)
-                    successfull = proxy.CreateDatabase(databaseName);
-                    if (successfull)
-                        Console.WriteLine("Database successfully created.\n");
-                    else
-                        Console.WriteLine($"Database with name '{databaseName}' already exists.\n");
+                    returnedValueString = proxy.CreateDatabase(databaseName);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "2":
-                    // -2 = za exception
-                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
-                    // 1 (uspesno)
-                    successfull = proxy.DeleteDatabase(databaseName);
-                    if (successfull)
-                        Console.WriteLine("Database successfully deleted.\n");
-                    else
-                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
+                    returnedValueString = proxy.DeleteDatabase(databaseName);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "3":
-                    Console.Write("Country: ");
-                    country = Console.ReadLine();
+                    message = CreateMessage(databaseName, "Insert");
 
-                    Console.Write("City: ");
-                    city = Console.ReadLine();
+                    signature = DigitalSignature.Create(message, proxy.Credentials.ClientCertificate.Certificate);
 
-                    do
-                    {
-                        Console.Write("Age: ");
-                        temp = Console.ReadLine();
-                    } while (!short.TryParse(temp, out fromAge));
-
-                    do
-                    {
-                        Console.Write("Salary: ");
-                        temp = Console.ReadLine();
-                    } while (!Double.TryParse(temp, out salary));
-
-                    do
-                    {
-                        Console.Write("Payday: ");
-                        payday = Console.ReadLine();
-                    } while (!Int32.TryParse(payday, out int pay));
-
-                    // -2 = za exception
-                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
-                    // 1 (uspesno)
-                    successfull = proxy.Insert(databaseName, country, city, fromAge, salary, payday);
-                    if (successfull)
-                        Console.WriteLine("New entity successfully inserted.\n");
-                    else
-                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
+                    returnedValueString = proxy.Insert(message, signature);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "4":
-                    int id;
-                    do
-                    {
-                        Console.Write("ID: ");
-                    } while (!Int32.TryParse(Console.ReadLine(), out id));
+                    message = CreateMessage(databaseName, "Edit");
 
-                    Console.Write("Country: ");
-                    country = Console.ReadLine();
+                    signature = DigitalSignature.Create(message, proxy.Credentials.ClientCertificate.Certificate);
 
-                    Console.Write("City: ");
-                    city = Console.ReadLine();
-
-                    do
-                    {
-                        Console.Write("Age: ");
-                        temp = Console.ReadLine();
-                    } while (!short.TryParse(temp, out fromAge));
-
-                    do
-                    {
-                        Console.Write("Salary: ");
-                        temp = Console.ReadLine();
-                    } while (!Double.TryParse(temp, out salary));
-
-                    do
-                    {
-                        Console.Write("Payday: ");
-                        payday = Console.ReadLine();
-                    } while (!Int32.TryParse(payday, out int pay));
-
-                    // -2 = za exception
-                    // -1 (neuspesno) = baza podataka sa nazivom ne postoji 
-                    // 0 (neuspesno) = id ne postoji
-                    // 1 (uspesno)
-                    successfull = proxy.Edit(databaseName, id, country, city, fromAge, salary, payday);
-                    if (successfull)
-                        Console.WriteLine("Existing entity successfully edited.\n");
-                    else /*if*/
-                        Console.WriteLine($"Database with name '{databaseName}' doesn't exists.\n");
-                    /*else if
-                        Console.WriteLine($"Entity with id '{id}' doesn't exists.\n");*/
+                    returnedValueString = proxy.Edit(message, signature);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
@@ -195,7 +119,7 @@ namespace Client
                     {
                         Console.Write("Payday: ");
                         payday = Console.ReadLine();
-                    } while (!Int32.TryParse(payday, out id));
+                    } while (!Int32.TryParse(payday, out int id));
 
                     returnedValueDouble = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
                     if (returnedValueDouble != -1)
@@ -221,7 +145,7 @@ namespace Client
                             temp = Console.ReadLine();
                         } while (!short.TryParse(temp, out toAge));
                     } while (fromAge > toAge);
-                    
+
                     returnedValueDouble = proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
                     if (returnedValueDouble != -1)
                         Console.WriteLine($"Avarage salary by city and age: {returnedValueDouble}\n");
@@ -251,6 +175,53 @@ namespace Client
             Console.WriteLine("\t8. Get average salary by city and age");
             Console.WriteLine("\t9. Exit");
             Console.Write("\t>> ");
+        }
+
+        private static string CreateMessage(string databaseName, string operation)
+        {
+            List<object> messageAndSignature = new List<object>();
+            string temp;
+            string payday;
+            double salary;
+            int id = -1;
+
+            short age;
+
+            if (operation == "Edit")
+            {
+                do
+                {
+                    Console.Write("ID: ");
+                } while (!Int32.TryParse(Console.ReadLine(), out id));
+            }
+
+            Console.Write("Country: ");
+            string country = Console.ReadLine();
+
+            Console.Write("City: ");
+            string city = Console.ReadLine();
+
+            do
+            {
+                Console.Write("Age: ");
+                temp = Console.ReadLine();
+            } while (!short.TryParse(temp, out age));
+
+            do
+            {
+                Console.Write("Salary: ");
+                temp = Console.ReadLine();
+            } while (!Double.TryParse(temp, out salary));
+
+            do
+            {
+                Console.Write("Payday: ");
+                payday = Console.ReadLine();
+            } while (!Int32.TryParse(payday, out int pay));
+
+            string message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payday}:{id}";
+
+            return message;
         }
     }
 }

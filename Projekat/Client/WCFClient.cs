@@ -35,7 +35,7 @@ namespace Client
         }
 
         #region Admin's permissions
-        public bool CreateDatabase(string databaseName)
+        public string CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             try
@@ -45,18 +45,16 @@ namespace Client
             // ovo baca kod CheckAccessCore u okviru AuthorizationManager-a klase ukoliko korisnik nema dozvolu
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("\nError while trying to create database: " + e.Message + Environment.NewLine);
-                return false;
+                return $"Error while trying to create database: {e.Message}";
             }
             // ovo baca svaka metode u okviru WCFService klase 
             catch(FaultException e)
             {
-                Console.WriteLine("\nError while trying to create database: " + e.Message);
-                return false;
+                return $"Error while trying to create database: {e.Message}";
             }
         }
 
-        public bool DeleteDatabase(string databaseName)
+        public string DeleteDatabase(string databaseName)
         {
             try
             {
@@ -64,62 +62,46 @@ namespace Client
             }
             catch(SecurityAccessDeniedException e)
             {
-                Console.WriteLine("\nError while trying to delete database: " + e.Message + Environment.NewLine);
-                return false;
+                return $"Error while trying to delete database: {e.Message}";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("\nError while trying to delete database: " + e.Message);
-                return false;
+                return $"Error while trying to delete database: {e.Message}";
             }
         }
         #endregion
 
         #region Modifier's permissions
-        public bool Edit(string databaseName, int id, string country, string city, short age, double salary, string payDay)
+        public string Edit(string message, byte[] signature)
         {
             try
             {
                 //Debugger.Launch();
-                string message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payDay}:{id}";
-                byte[] signature = DigitalSignature.Create(message, this.Credentials.ClientCertificate.Certificate);
-
-                //return factory.Edit(message, signature);
-
-                return factory.Edit(databaseName, id, country, city, age, salary, payDay);
+                return factory.Edit(message, signature);
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to edit entity in database: " + e.Message);
-                return false;
+                return $"Error while trying to edit entity in database: {e.Message}";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to edit entity in database: " + e.Message);
-                return false;
+                return $"Error while trying to edit entity in database: {e.Message}";
             }
         }
 
-        public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
+        public string Insert(string message, byte[] signature)
         {
             try
             {
-                string message = $"{databaseName}:{country}:{city}:{age}:{salary}:{payDay}";
-                byte[] signature = DigitalSignature.Create(message, this.Credentials.ClientCertificate.Certificate);
-
-                //return factory.Insert(message, signature);
-
-                return factory.Insert(databaseName, country, city, age, salary, payDay);
+                return factory.Insert(message, signature);
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("Error while trying to insert entity to database: " + e.Message);
-                return false;
+                return $"Error while trying to insert entity to database: {e.Message}";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("Error while trying to insert entity to database: " + e.Message);
-                return false;
+                return $"Error while trying to insert entity to database: {e.Message}";
             }
         }
         #endregion
