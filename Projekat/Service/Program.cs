@@ -18,6 +18,9 @@ namespace Service
     {
         static void Main(string[] args)
         {
+            
+            WCFDatabase b = new WCFDatabase();
+
             //uzmemo username od servera kako bismo uzeli certificate uz pomoc toga
             String serviceCertificateCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 
@@ -44,10 +47,13 @@ namespace Service
             serviceHost.Authorization.ExternalAuthorizationPolicies = policies.AsReadOnly();
 
             serviceHost.Open();
-            Console.WriteLine("WCFService is opened. Press <enter> to finish...");
+            Console.WriteLine("WCFService is opened. Press <enter> to finish and save databases...");
             Console.ReadLine();
 
             serviceHost.Close();
+
+            b.SerializeData();
+
         }
     }
 }

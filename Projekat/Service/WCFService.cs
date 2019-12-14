@@ -15,14 +15,21 @@ namespace Service
 {
     public class WCFService : IWCFService
     {
+        private WCFDatabase db = new WCFDatabase();
+        public WCFService()
+        {
+
+        }
+
         #region Admin's permissions
         public bool CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
             {
-                Console.WriteLine("Create database succeeded");
-                return true;
+
+                return db.CreateDatabase(databaseName);
+
             }
             else
             {
@@ -35,8 +42,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
-                Console.WriteLine("Delete database succeeded");
-                return true;
+
+                return db.DeleteDatabase(databaseName);
+
             }
             else
             {
@@ -51,8 +59,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
-                Console.WriteLine("Edit succeeded");
-                return true;
+
+                return db.Edit(databaseName, id, country, city, age, salary, payDay);
+
             }
             else
             {
@@ -65,8 +74,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
-                Console.WriteLine("Insert succeeded");
-                return true;
+
+                return db.Insert(databaseName, country, city, age, salary, payDay);
+               
             }
             else
             {
@@ -81,8 +91,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
-                Console.WriteLine("ViewAll() succeeded");
-                return "ASD" + Environment.NewLine;
+                
+                return db.ViewAll(databaseName);
+
             }
             else
             {
@@ -95,8 +106,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
-                Console.WriteLine("ViewMaxPayed() succeeded");
-                return "ASD" + Environment.NewLine;
+
+                return db.ViewMaxPayed(databaseName, tf);
+
             }
             else
             {
@@ -109,8 +121,9 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
-                Console.WriteLine("AverageSalaryByCityAndAge() succeeded");
-                return 5.0;
+
+                return db.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
+
             }
             else
             {
@@ -123,8 +136,7 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
-                Console.WriteLine("AverageSalaryByCountryAndPayday() succeeded");
-                return 5.0;
+                return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
             }
             else
             {
