@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,17 +14,25 @@ using System.Xml.Serialization;
 namespace Service
 {
 
-
     public class WCFDatabase : IWCFService
     {
         public Dictionary<String, Dictionary<int, Information>> DbList = new Dictionary<string, Dictionary<int, Information>>();
         public String DatabaseNames = "spisakBaza.txt";
+        private static WCFDatabase instance = null;
 
-        public WCFDatabase()
+        private WCFDatabase()
         {
             DeserializeData();
         }
 
+        public static WCFDatabase InitializeDb()
+        {
+            if(instance == null)
+            {
+                instance = new WCFDatabase();
+            }
+            return instance;
+        }
 
         #region Serialization
         public void SerializeData()
@@ -104,6 +113,7 @@ namespace Service
 
         public bool CreateDatabase(string databaseName)
         {
+            //Debugger.Launch();
             if (!DbList.ContainsKey(databaseName))
             {
                 DbList.Add(databaseName, new Dictionary<int, Information>());
@@ -141,6 +151,7 @@ namespace Service
 
         public bool Insert(string databaseName, string country, string city, short age, double salary, string payDay)
         {
+            //Debugger.Launch();
             if (DbList.ContainsKey(databaseName))
             {
                 Information info = new Information() { Drzava = country, Grad = city, Starost = age, MesecnaPrimanja = salary, Year = payDay };

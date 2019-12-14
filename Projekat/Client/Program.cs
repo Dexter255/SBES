@@ -1,6 +1,7 @@
 ﻿using Manager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
@@ -44,6 +45,7 @@ namespace Client
 
         private static void SelectOption(WCFClient proxy, string option)
         {
+            Debugger.Launch();
             string databaseName = String.Empty;
             string returnedValueString = String.Empty;
             string city = String.Empty;

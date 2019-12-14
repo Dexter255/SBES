@@ -18,8 +18,8 @@ namespace Service
     {
         static void Main(string[] args)
         {
-            
-            WCFDatabase b = new WCFDatabase();
+
+            WCFDatabase db = WCFDatabase.InitializeDb();
 
             //uzmemo username od servera kako bismo uzeli certificate uz pomoc toga
             String serviceCertificateCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
@@ -52,7 +52,7 @@ namespace Service
 
             serviceHost.Close();
 
-            b.SerializeData();
+            db.SerializeData();
 
         }
     }

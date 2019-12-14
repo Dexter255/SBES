@@ -15,7 +15,7 @@ namespace Service
 {
     public class WCFService : IWCFService
     {
-        private WCFDatabase db = new WCFDatabase();
+        private WCFDatabase db = WCFDatabase.InitializeDb();
         public WCFService()
         {
 
