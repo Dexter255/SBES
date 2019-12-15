@@ -40,7 +40,7 @@ namespace Service
             serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
             serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
 
-            //serviceHost.Authorization.ServiceAuthorizationManager = new AuthorizationManager();
+            serviceHost.Authorization.ServiceAuthorizationManager = new AuthorizationManager();
             serviceHost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.Custom;
             List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>();
             policies.Add(new CustomPolicy());

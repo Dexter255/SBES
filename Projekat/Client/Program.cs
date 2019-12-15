@@ -18,6 +18,16 @@ namespace Client
         {
             //naziv serverovog .cer sertifikata
             String serverCertificateCN = "wcfService";
+
+            var clientCert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, "userAdmin");
+
+            Debugger.Launch();
+            byte[] ret = DataCryptography.EncryptData(clientCert, "porukica");
+
+            String t = DataCryptography.DecryptData(clientCert, ret);
+
+
+            Console.WriteLine($"{t}");
             NetTcpBinding binding = new NetTcpBinding();
             //setujem da se autentifikacija radi uz pomoc sertifikata
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
@@ -62,6 +72,8 @@ namespace Client
             short fromAge;
             short toAge;
 
+            X509Certificate2 cert = proxy.Credentials.ClientCertificate.Certificate;
+
             Console.Write("\nEnter database name: ");
             databaseName = Console.ReadLine();
 
@@ -100,14 +112,14 @@ namespace Client
                     break;
 
                 case "5":
-                    returnedValueString = proxy.ViewAll(databaseName);
+                    returnedValueString = DataCryptography.DecryptData(cert, proxy.ViewAll(databaseName));
                     if (returnedValueString != "-1")
                         Console.WriteLine($"Entities: \n{returnedValueString}\n");
 
                     break;
 
                 case "6":
-                    returnedValueString = proxy.ViewMaxPayed(databaseName);
+                    returnedValueString = DataCryptography.DecryptData(cert, proxy.ViewMaxPayed(databaseName));
                     if (returnedValueString != "-1")
                         Console.WriteLine($"Max salary from all states: \n{returnedValueString}\n");
 
@@ -123,9 +135,8 @@ namespace Client
                         payday = Console.ReadLine();
                     } while (!Int32.TryParse(payday, out int id));
 
-                    returnedValueDouble = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
-                    if (returnedValueDouble != -1)
-                        Console.WriteLine($"Avarage salary by country and payday: {returnedValueDouble}\n");
+                    returnedValueString = DataCryptography.DecryptData(cert, proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday));
+                    
 
                     break;
 
@@ -148,9 +159,8 @@ namespace Client
                         } while (!short.TryParse(temp, out toAge));
                     } while (fromAge > toAge);
 
-                    returnedValueDouble = proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
-                    if (returnedValueDouble != -1)
-                        Console.WriteLine($"Avarage salary by city and age: {returnedValueDouble}\n");
+                    returnedValueString = DataCryptography.DecryptData(cert, proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge));
+                    
 
                     break;
 
@@ -179,9 +189,9 @@ namespace Client
             Console.Write("\t>> ");
         }
 
+        //Enkapsulacija podataka koji se salju na server prilikom insert i edit operacija (kako bi se obezbedilo digitalno potpisivanje "poruke")
         private static string CreateMessage(string databaseName, string operation)
         {
-            List<object> messageAndSignature = new List<object>();
             string temp;
             string payday;
             double salary;

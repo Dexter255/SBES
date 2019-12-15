@@ -107,7 +107,7 @@ namespace Client
         #endregion
 
         #region Viewer's permissions
-        public double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
+        public byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
             try
             {
@@ -116,16 +116,16 @@ namespace Client
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message + Environment.NewLine);
-                return -1;
+                return new byte[0];
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message);
-                return -1;
+                return new byte[0];
             }
         }
 
-        public double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
+        public byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
             try
             {
@@ -134,16 +134,16 @@ namespace Client
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message + Environment.NewLine);
-                return -1;
+                return new byte[0];
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message);
-                return -1;
+                return new byte[0];
             }
         }
 
-        public string ViewAll(string databaseName)
+        public byte[] ViewAll(string databaseName)
         {
             try
             {
@@ -152,16 +152,16 @@ namespace Client
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get all entities from database: " + e.Message + Environment.NewLine);
-                return "-1";
+                return new byte[0];
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get all entities from database: " + e.Message);
-                return "-1";
+                return new byte[0];
             }
         }
 
-        public string ViewMaxPayed(string databaseName)
+        public byte[] ViewMaxPayed(string databaseName)
         {
             try
             {
@@ -170,12 +170,12 @@ namespace Client
             catch (SecurityAccessDeniedException e)
             {
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message + Environment.NewLine);
-                return "-1";
+                return new byte[0];
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message);
-                return "-1";
+                return new byte[0];
             }
         }
         #endregion

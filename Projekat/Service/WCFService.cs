@@ -87,7 +87,7 @@ namespace Service
         #endregion
 
         #region Viewer's permissions
-        public String ViewAll(string databaseName)
+        public byte[] ViewAll(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -102,7 +102,7 @@ namespace Service
             }
         }
 
-        public String ViewMaxPayed(string databaseName)
+        public byte[] ViewMaxPayed(string databaseName)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -117,7 +117,7 @@ namespace Service
             }
         }
 
-        public double AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
+        public byte[] AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {
@@ -132,7 +132,7 @@ namespace Service
             }
         }
 
-        public double AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
+        public byte[] AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
         {
             if (Thread.CurrentPrincipal.IsInRole("View"))
             {

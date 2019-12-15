@@ -218,22 +218,22 @@ namespace Service
             return $"Message was changed by interceptor.\n";
         }
 
-        public string ViewAll(string databaseName)
+        public byte[] ViewAll(string databaseName)
         {
             throw new NotImplementedException();
         }
 
-        public string ViewMaxPayed(string databaseName)
+        public byte[] ViewMaxPayed(string databaseName)
         {
             throw new NotImplementedException();
         }
 
-        public double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
+        public byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
             throw new NotImplementedException();
         }
 
-        public double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
+        public byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
             throw new NotImplementedException();
         }

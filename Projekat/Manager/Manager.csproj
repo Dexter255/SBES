@@ -47,6 +47,7 @@
     <Compile Include="CertManager.cs" />
     <Compile Include="CustomPolicy.cs" />
     <Compile Include="CustomPrincipal.cs" />
+    <Compile Include="DataCryptography.cs" />
     <Compile Include="DigitalSignature.cs" />
     <Compile Include="Formatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

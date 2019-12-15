@@ -26,13 +26,13 @@ namespace Contracts
 
         #region Viewer's permission
         [OperationContract]
-        string ViewAll(string databaseName);
+        byte[] ViewAll(string databaseName);
         [OperationContract]
-        string ViewMaxPayed(string databaseName);
+        byte[] ViewMaxPayed(string databaseName);
         [OperationContract]
-        double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
+        byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
         [OperationContract]
-        double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
+        byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
         #endregion
     }
 
