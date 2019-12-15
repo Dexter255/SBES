@@ -8,7 +8,11 @@ Baza podataka - XML
 Kreiranje sertifikata
 Autentifikacija - pomocu sertifikata
 Autorizacija - RBAC
-Logger
+Logger primeniti na:
+	Autentifikaciju
+	Autorizaciju
+	Bazu podataka - sve operacije
+
 Digitalno potpisivanje poruka - klijent kada salje serveru, upis i modifikacija
 Kriptovanje AES, mod CBC - prilikom citanja iz baze podataka
 

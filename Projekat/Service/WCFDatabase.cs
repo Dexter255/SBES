@@ -17,8 +17,6 @@ using System.Xml.Serialization;
 
 namespace Service
 {
-
-
     public class WCFDatabase : IWCFService
     {
         public Dictionary<String, Dictionary<int, Information>> DbList = new Dictionary<string, Dictionary<int, Information>>();
@@ -115,7 +113,7 @@ namespace Service
         }
         #endregion
 
-
+        #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
             if (!DbList.ContainsKey(databaseName))
@@ -136,7 +134,9 @@ namespace Service
             }
             return $"Database with name '{databaseName}' doesn't exists.\n";
         }
+        #endregion  
 
+        #region Modifier's operations
         public string Edit(string message, byte[] signature)
         {
             //Debugger.Launch();
@@ -162,11 +162,11 @@ namespace Service
                 {
                     if (DbList[parts[0]].ContainsKey(id))
                     {
-                        DbList[parts[0]][id].Drzava = parts[1];
-                        DbList[parts[0]][id].Grad = parts[2];
+                        DbList[parts[0]][id].Drzava = parts[1].Trim().ToLower();
+                        DbList[parts[0]][id].Grad = parts[2].Trim().ToLower();
                         DbList[parts[0]][id].Starost = short.Parse(parts[3]);
                         DbList[parts[0]][id].MesecnaPrimanja = Double.Parse(parts[4]);
-                        DbList[parts[0]][id].Year = parts[5];
+                        DbList[parts[0]][id].Year = parts[5].Trim();
                         //SerializeData();
                         return "Existing entity successfully edited.\n";
                     }
@@ -205,7 +205,7 @@ namespace Service
 
                 if (DbList.ContainsKey(parts[0]))
                 {
-                    Information info = new Information() { Drzava = parts[1], Grad = parts[2], Starost = short.Parse(parts[3]), MesecnaPrimanja = Double.Parse(parts[4]), Year = parts[5] };
+                    Information info = new Information() { Drzava = parts[1].Trim().ToLower(), Grad = parts[2].Trim().ToLower(), Starost = short.Parse(parts[3]), MesecnaPrimanja = Double.Parse(parts[4]), Year = parts[5].Trim() };
                     DbList[parts[0]].Add(info.Id, info);
                     return "New entity successfully inserted.\n";
                 }
@@ -217,25 +217,142 @@ namespace Service
 
             return $"Message was changed by interceptor.\n";
         }
+        #endregion
 
+        #region Viewer's operations
         public byte[] ViewAll(string databaseName)
         {
-            throw new NotImplementedException();
+            string message = "----------------------------------------------------\nAll entities:\n\n";
+
+            if (DbList.ContainsKey(databaseName))
+            {
+                foreach (Information information in DbList[databaseName].Values)
+                {
+                    message += information.ToString();
+                }
+
+                return message + "----------------------------------------------------\n";
+            }
+            else
+            {
+                return $"Database with name '{databaseName}' doesn't exists.\n";
+            }
         }
 
         public byte[] ViewMaxPayed(string databaseName)
         {
-            throw new NotImplementedException();
+            //Debugger.Launch();
+            Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
+            string message = "----------------------------------------------------\nMax salary from all states:\n\n";
+
+            if (DbList.ContainsKey(databaseName))
+            {
+                foreach (Information information in DbList[databaseName].Values)
+                {
+                    if (informations.ContainsKey(information.Drzava))
+                    {
+                        informations[information.Drzava].Add(information);
+                    }
+                    else
+                    {
+                        informations.Add(information.Drzava, new List<Information>() { information });
+                    }
+                }
+
+                foreach(var pair in informations)
+                {
+                    message += $"{pair.Key}:\t{pair.Value.Max(x => x.MesecnaPrimanja).ToString()}\n";
+                }
+            }
+            else
+            {
+                return $"Database with name '{databaseName}' doesn't exists.\n";
+            }
+
+            return message + "\n----------------------------------------------------\n";
         }
 
         public byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
-            throw new NotImplementedException();
+            Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
+            string message = "----------------------------------------------------\nAvarage salary by city and age:\n\n";
+
+            if (DbList.ContainsKey(databaseName))
+            {
+                foreach(Information information in DbList[databaseName].Values)
+                {
+                    if(information.Grad == city.Trim().ToLower() && information.Starost >= fromAge & information.Starost <= toAge)
+                    {
+                        if (informations.ContainsKey(information.Grad))
+                        {
+                            informations[information.Grad].Add(information);
+                        }
+                        else
+                        {
+                            informations.Add(information.Grad, new List<Information>() { information });
+                        }
+                    }
+                }
+
+                foreach(var pair in informations)
+                {
+                    message += $"{pair.Key}:\t{pair.Value.Average(x => x.MesecnaPrimanja).ToString()}\n";
+                }
+            }
+            else
+            {
+                return $"Database with name '{databaseName}' doesn't exists.\n";
+            }
+
+            return message + "\n----------------------------------------------------\n";
         }
 
         public byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
-            throw new NotImplementedException();
+            Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
+            string message = "----------------------------------------------------\nAvarage salary by country and payday:\n\n";
+
+            if (DbList.ContainsKey(databaseName))
+            {
+                foreach (Information information in DbList[databaseName].Values)
+                {
+                    if (information.Drzava == country.Trim().ToLower() && information.Year == payDay.Trim())
+                    {
+                        if (informations.ContainsKey(information.Drzava))
+                        {
+                            informations[information.Drzava].Add(information);
+                        }
+                        else
+                        {
+                            informations.Add(information.Drzava, new List<Information>() { information });
+                        }
+                    }
+                }
+
+                foreach (var pair in informations)
+                {
+                    message += $"{pair.Key}:\t{pair.Value.Average(x => x.MesecnaPrimanja).ToString()}\n";
+                }
+            }
+            else
+            {
+                return $"Database with name '{databaseName}' doesn't exists.\n";
+            }
+
+            return message + "\n----------------------------------------------------\n";
         }
+
+        public byte[] ViewDatabasesNames()
+        {
+            string message = "----------------------------------------------------\nDatabases names:\n\n";
+
+            foreach(string databaseName in DbList.Keys)
+            {
+                message += $"{databaseName}\n";
+            }
+
+            return message + "\n----------------------------------------------------\n";
+        }
+        #endregion
     }
 }

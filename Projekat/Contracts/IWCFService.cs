@@ -10,21 +10,21 @@ namespace Contracts
     [ServiceContract]
     public interface IWCFService
     {
-        #region Admin's permissions
+        #region Admin's operations
         [OperationContract]
         string CreateDatabase(string databaseName);
         [OperationContract]
         string DeleteDatabase(string databaseName);
         #endregion
 
-        #region Modifier's permissions
+        #region Modifier's operations
         [OperationContract]
         string Edit(string message, byte[] signature);
         [OperationContract]
         string Insert(string message, byte[] signature);
         #endregion
 
-        #region Viewer's permission
+        #region Viewer's operations
         [OperationContract]
         byte[] ViewAll(string databaseName);
         [OperationContract]
@@ -33,6 +33,8 @@ namespace Contracts
         byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
         [OperationContract]
         byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
+        [OperationContract]
+        string ViewDatabasesNames();
         #endregion
     }
 

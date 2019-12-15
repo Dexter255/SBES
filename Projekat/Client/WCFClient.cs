@@ -34,7 +34,7 @@ namespace Client
 
         }
 
-        #region Admin's permissions
+        #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
@@ -71,7 +71,7 @@ namespace Client
         }
         #endregion
 
-        #region Modifier's permissions
+        #region Modifier's operations
         public string Edit(string message, byte[] signature)
         {
             try
@@ -106,7 +106,7 @@ namespace Client
         }
         #endregion
 
-        #region Viewer's permissions
+        #region Viewer's operations
         public byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
             try
@@ -177,6 +177,11 @@ namespace Client
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message);
                 return new byte[0];
             }
+        }
+
+        public byte[] ViewDatabasesNames()
+        {
+            return factory.ViewDatabasesNames();
         }
         #endregion
     }

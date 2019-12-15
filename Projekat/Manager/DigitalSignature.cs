@@ -11,7 +11,7 @@ namespace Manager
     {
         public static byte[] Create(string message, X509Certificate2 certificate)
         {
-            // entity se hash-uje SHA1 algoritmom
+            // poruka se hash-uje SHA1 algoritmom
             SHA1Managed sha1 = new SHA1Managed();
             byte[] hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(message));
 
