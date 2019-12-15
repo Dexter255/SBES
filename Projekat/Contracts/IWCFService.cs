@@ -34,7 +34,7 @@ namespace Contracts
         [OperationContract]
         byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
         [OperationContract]
-        string ViewDatabasesNames();
+        byte[] ViewDatabasesNames();
         #endregion
     }
 

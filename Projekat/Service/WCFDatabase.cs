@@ -223,6 +223,8 @@ namespace Service
         public byte[] ViewAll(string databaseName)
         {
             string message = "----------------------------------------------------\nAll entities:\n\n";
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
 
             if (DbList.ContainsKey(databaseName))
             {
@@ -231,16 +233,22 @@ namespace Service
                     message += information.ToString();
                 }
 
-                return message + "----------------------------------------------------\n";
+                message += "----------------------------------------------------\n";
+                return DataCryptography.EncryptData(certificate, message);
             }
             else
             {
-                return $"Database with name '{databaseName}' doesn't exists.\n";
+                return DataCryptography.EncryptData(certificate, $"Database with name '{databaseName}' doesn't exists.\n");
             }
         }
 
         public byte[] ViewMaxPayed(string databaseName)
         {
+
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
+
             //Debugger.Launch();
             Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
             string message = "----------------------------------------------------\nMax salary from all states:\n\n";
@@ -266,14 +274,18 @@ namespace Service
             }
             else
             {
-                return $"Database with name '{databaseName}' doesn't exists.\n";
+                return DataCryptography.EncryptData(certificate, $"Database with name '{databaseName}' doesn't exists.\n");
             }
 
-            return message + "\n----------------------------------------------------\n";
+            return DataCryptography.EncryptData(certificate, message + "\n----------------------------------------------------\n");
         }
 
         public byte[] AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
+
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
             Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
             string message = "----------------------------------------------------\nAvarage salary by city and age:\n\n";
 
@@ -301,14 +313,18 @@ namespace Service
             }
             else
             {
-                return $"Database with name '{databaseName}' doesn't exists.\n";
+                return DataCryptography.EncryptData(certificate, $"Database with name '{databaseName}' doesn't exists.\n");
             }
 
-            return message + "\n----------------------------------------------------\n";
+            return DataCryptography.EncryptData(certificate, message + "\n----------------------------------------------------\n");
         }
 
         public byte[] AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
+
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
             Dictionary<string, List<Information>> informations = new Dictionary<string, List<Information>>();
             string message = "----------------------------------------------------\nAvarage salary by country and payday:\n\n";
 
@@ -336,14 +352,18 @@ namespace Service
             }
             else
             {
-                return $"Database with name '{databaseName}' doesn't exists.\n";
+                return DataCryptography.EncryptData(certificate, $"Database with name '{databaseName}' doesn't exists.\n");
             }
 
-            return message + "\n----------------------------------------------------\n";
+            return DataCryptography.EncryptData(certificate, message + "\n----------------------------------------------------\n");
         }
 
         public byte[] ViewDatabasesNames()
         {
+
+            string clientName = (Thread.CurrentPrincipal.Identity as GenericIdentity).Name.Split(',', ';')[0].Split('=')[1];
+            X509Certificate2 certificate = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, clientName);
+
             string message = "----------------------------------------------------\nDatabases names:\n\n";
 
             foreach(string databaseName in DbList.Keys)
@@ -351,7 +371,7 @@ namespace Service
                 message += $"{databaseName}\n";
             }
 
-            return message + "\n----------------------------------------------------\n";
+            return DataCryptography.EncryptData(certificate, message + "\n----------------------------------------------------\n");
         }
         #endregion
     }

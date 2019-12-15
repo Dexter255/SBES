@@ -102,13 +102,13 @@ namespace Client
                     break;
 
                 case "5":
-                    returnedValueString = DataCryptography.DecryptData(cert, proxy.ViewAll(databaseName));
+                    returnedValueString = DataCryptography.DecryptData(proxy.Credentials.ClientCertificate.Certificate, proxy.ViewAll(databaseName));
                     Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "6":
-                    returnedValueString = DataCryptography.DecryptData(cert, proxy.ViewMaxPayed(databaseName));
+                    returnedValueString = DataCryptography.DecryptData(proxy.Credentials.ClientCertificate.Certificate, proxy.ViewMaxPayed(databaseName));
                     Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
@@ -123,7 +123,7 @@ namespace Client
                         payday = Console.ReadLine();
                     } while (!Int32.TryParse(payday, out int id));
 
-                    returnedValueString = DataCryptography.DecryptData(cert, proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday));
+                    returnedValueString = DataCryptography.DecryptData(proxy.Credentials.ClientCertificate.Certificate, proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday));
                     
                     //returnedValueString = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
                     Console.WriteLine(Environment.NewLine + returnedValueString);
@@ -149,13 +149,13 @@ namespace Client
                         } while (!short.TryParse(temp, out toAge));
                     } while (fromAge > toAge);
 
-                    returnedValueString = DataCryptography.DecryptData(cert, proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge));
+                    returnedValueString = DataCryptography.DecryptData(proxy.Credentials.ClientCertificate.Certificate, proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge));
                     Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "9":
-                    returnedValueString = proxy.ViewDatabasesNames();
+                    returnedValueString = DataCryptography.DecryptData(proxy.Credentials.ClientCertificate.Certificate, proxy.ViewDatabasesNames());
                     Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;

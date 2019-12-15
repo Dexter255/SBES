@@ -99,7 +99,7 @@ namespace Service
             return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
         }
 
-        public string ViewDatabasesNames()
+        public byte[] ViewDatabasesNames()
         {
             return db.ViewDatabasesNames();
         }
