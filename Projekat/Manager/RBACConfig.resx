@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Admins" xml:space="preserve">
-    <value>CreateDB,DeleteDB</value>
+    <value>View,Edit,Insert,CreateDB,DeleteDB</value>
   </data>
   <data name="Modifiers" xml:space="preserve">
-    <value>Edit,Insert</value>
+    <value>View,Edit,Insert</value>
   </data>
   <data name="Viewers" xml:space="preserve">
     <value>View</value>

@@ -21,15 +21,13 @@ namespace Service
 
         }
 
-        #region Admin's permissions
+        #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
             {
-
                 return db.CreateDatabase(databaseName);
-
             }
             else
             {
@@ -42,9 +40,7 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
-
                 return db.DeleteDatabase(databaseName);
-
             }
             else
             {
@@ -54,14 +50,12 @@ namespace Service
         }
         #endregion
 
-        #region Modifier's permissions
+        #region Modifier's operations
         public string Edit(string message, byte[] signature)
         {
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
-
                 return db.Edit(message, signature);
-
             }
             else
             {
@@ -74,9 +68,7 @@ namespace Service
         {
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
-
                 return db.Insert(message, signature);
-               
             }
             else
             {
@@ -86,64 +78,32 @@ namespace Service
         }
         #endregion
 
-        #region Viewer's permissions
+        #region Viewer's operations
         public String ViewAll(string databaseName)
         {
-            if (Thread.CurrentPrincipal.IsInRole("View"))
-            {
-                
-                return db.ViewAll(databaseName);
-
-            }
-            else
-            {
-                throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized.\n"));
-            }
+            return db.ViewAll(databaseName);
         }
 
         public String ViewMaxPayed(string databaseName)
         {
-            if (Thread.CurrentPrincipal.IsInRole("View"))
-            {
-
-                return db.ViewMaxPayed(databaseName);
-
-            }
-            else
-            {
-                throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized.\n"));
-            }
+            return db.ViewMaxPayed(databaseName);
         }
 
-        public double AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
+        public string AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
         {
-            if (Thread.CurrentPrincipal.IsInRole("View"))
-            {
-
-                return db.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
-
-            }
-            else
-            {
-                throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized.\n"));
-            }
+            return db.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
         }
 
-        public double AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
+        public string AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
         {
-            if (Thread.CurrentPrincipal.IsInRole("View"))
-            {
-                return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
-            }
-            else
-            {
-                throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
-                    new FaultReason("Not authorized.\n"));
-            }
+            return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
         }
+
+        public string ViewDatabasesNames()
+        {
+            return db.ViewDatabasesNames();
+        }
+
         #endregion
     }
 }

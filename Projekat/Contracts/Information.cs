@@ -24,7 +24,7 @@ namespace Contracts
 
         public override string ToString()
         {
-            return $"{Id}\t{Drzava}\t{Grad}\t{Starost}\t{MesecnaPrimanja}\t{Year}" + Environment.NewLine;
+            return $"\nID: {Id}\nCountry: {Drzava}\nCity: {Grad}\nAge: {Starost}\nSalary: {MesecnaPrimanja}\nPayday: {Year}" + Environment.NewLine + Environment.NewLine;
         }
     }
 }

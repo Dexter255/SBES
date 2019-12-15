@@ -61,7 +61,7 @@ namespace Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CreateDB,DeleteDB.
+        ///   Looks up a localized string similar to View,Edit,Insert,CreateDB,DeleteDB.
         /// </summary>
         internal static string Admins {
             get {
@@ -70,7 +70,7 @@ namespace Manager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit,Insert.
+        ///   Looks up a localized string similar to View,Edit,Insert.
         /// </summary>
         internal static string Modifiers {
             get {

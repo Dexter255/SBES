@@ -34,7 +34,7 @@ namespace Client
 
         }
 
-        #region Admin's permissions
+        #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
             //Debugger.Launch();
@@ -71,7 +71,7 @@ namespace Client
         }
         #endregion
 
-        #region Modifier's permissions
+        #region Modifier's operations
         public string Edit(string message, byte[] signature)
         {
             try
@@ -106,8 +106,8 @@ namespace Client
         }
         #endregion
 
-        #region Viewer's permissions
-        public double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
+        #region Viewer's operations
+        public string AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge)
         {
             try
             {
@@ -115,17 +115,16 @@ namespace Client
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message + Environment.NewLine);
-                return -1;
+                return $"Error while trying to get average salary by city and age from database: {e.Message}";
             }
             catch (FaultException e)
             {
                 Console.WriteLine("\nError while trying to get average salary by city and age from database: " + e.Message);
-                return -1;
+                return $"Error while trying to get average salary by city and age from database: {e.Message}";
             }
         }
 
-        public double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
+        public string AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay)
         {
             try
             {
@@ -133,13 +132,11 @@ namespace Client
             }
             catch (SecurityAccessDeniedException e)
             {
-                Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message + Environment.NewLine);
-                return -1;
+                return $"Error while trying to get average salary by country and payday from database: {e.Message}";
             }
             catch (FaultException e)
             {
-                Console.WriteLine("\nError while trying to get average salary by country and payday from database: " + e.Message);
-                return -1;
+                return $"Error while trying to get average salary by country and payday from database: {e.Message}";
             }
         }
 
@@ -177,6 +174,11 @@ namespace Client
                 Console.WriteLine("\nError while trying to get max salary from all states: " + e.Message);
                 return "-1";
             }
+        }
+
+        public string ViewDatabasesNames()
+        {
+            return factory.ViewDatabasesNames();
         }
         #endregion
     }

@@ -37,10 +37,10 @@ namespace Client
                     PrintMenu();
                     option = Console.ReadLine();
 
-                    if (Int32.TryParse(option, out int opt) && option != "9")
+                    if (Int32.TryParse(option, out int opt) && option != "10")
                         SelectOption(proxy, option);
 
-                } while (option != "9");
+                } while (option != "10");
             }
 
             Console.Write("\nPress any key to exit.");
@@ -49,7 +49,7 @@ namespace Client
 
         private static void SelectOption(WCFClient proxy, string option)
         {
-            Debugger.Launch();
+            //Debugger.Launch();
             string databaseName = String.Empty;
             string returnedValueString = String.Empty;
             string city = String.Empty;
@@ -58,12 +58,14 @@ namespace Client
             string temp = String.Empty;
             string message = String.Empty;
             byte[] signature;
-            double returnedValueDouble;
             short fromAge;
             short toAge;
 
-            Console.Write("\nEnter database name: ");
-            databaseName = Console.ReadLine();
+            if (option != "9")
+            {
+                Console.Write("\nEnter database name: ");
+                databaseName = Console.ReadLine();
+            }
 
             switch (option)
             {
@@ -101,15 +103,13 @@ namespace Client
 
                 case "5":
                     returnedValueString = proxy.ViewAll(databaseName);
-                    if (returnedValueString != "-1")
-                        Console.WriteLine($"Entities: \n{returnedValueString}\n");
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "6":
                     returnedValueString = proxy.ViewMaxPayed(databaseName);
-                    if (returnedValueString != "-1")
-                        Console.WriteLine($"Max salary from all states: \n{returnedValueString}\n");
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
@@ -123,9 +123,8 @@ namespace Client
                         payday = Console.ReadLine();
                     } while (!Int32.TryParse(payday, out int id));
 
-                    returnedValueDouble = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
-                    if (returnedValueDouble != -1)
-                        Console.WriteLine($"Avarage salary by country and payday: {returnedValueDouble}\n");
+                    returnedValueString = proxy.AverageSalaryByCountryAndPayday(databaseName, country, payday);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
@@ -148,13 +147,18 @@ namespace Client
                         } while (!short.TryParse(temp, out toAge));
                     } while (fromAge > toAge);
 
-                    returnedValueDouble = proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
-                    if (returnedValueDouble != -1)
-                        Console.WriteLine($"Avarage salary by city and age: {returnedValueDouble}\n");
+                    returnedValueString = proxy.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
 
                     break;
 
                 case "9":
+                    returnedValueString = proxy.ViewDatabasesNames();
+                    Console.WriteLine(Environment.NewLine + returnedValueString);
+
+                    break;
+
+                case "10":
                     Console.WriteLine("Exit");
                     break;
 
@@ -175,7 +179,8 @@ namespace Client
             Console.WriteLine("\t6. Get max salary from all states");
             Console.WriteLine("\t7. Get average salary by country and payday");
             Console.WriteLine("\t8. Get average salary by city and age");
-            Console.WriteLine("\t9. Exit");
+            Console.WriteLine("\t9. View databases names");
+            Console.WriteLine("\t10. Exit");
             Console.Write("\t>> ");
         }
 

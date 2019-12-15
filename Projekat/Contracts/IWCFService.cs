@@ -30,9 +30,11 @@ namespace Contracts
         [OperationContract]
         string ViewMaxPayed(string databaseName);
         [OperationContract]
-        double AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
+        string AverageSalaryByCityAndAge(string databaseName, string city, short fromAge, short toAge);
         [OperationContract]
-        double AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
+        string AverageSalaryByCountryAndPayday(string databaseName, string country, string payDay);
+        [OperationContract]
+        string ViewDatabasesNames();
         #endregion
     }
 
