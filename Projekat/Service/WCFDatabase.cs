@@ -120,7 +120,7 @@ namespace Service
             {
                 DbList.Add(databaseName, new Dictionary<int, Information>());
                 //SerializeData();
-                return "Database successfully created.\n";
+                return $"Database with name '{databaseName}' successfully created.\n";
             }
             return $"Database with name '{databaseName}' already exists.\n";
         }
@@ -130,7 +130,7 @@ namespace Service
             if (DbList.ContainsKey(databaseName))
             {
                 DbList.Remove(databaseName);
-                return "Database successfully deleted.\n";
+                return $"Database with name '{databaseName}' successfully deleted.\n";
             }
             return $"Database with name '{databaseName}' doesn't exists.\n";
         }
@@ -168,11 +168,11 @@ namespace Service
                         DbList[parts[0]][id].MesecnaPrimanja = Double.Parse(parts[4]);
                         DbList[parts[0]][id].Year = parts[5].Trim();
                         //SerializeData();
-                        return "Existing entity successfully edited.\n";
+                        return $"Existing entity with id '{id}' in database '{parts[0]}' successfully edited.\n";
                     }
                     else
                     {
-                        return $"Entity with id '{id}' doesn't exists.\n";
+                        return $"Entity with id '{id}' in database '{parts[0]}' doesn't exists.\n";
                     }
                 }
                 else
@@ -207,7 +207,7 @@ namespace Service
                 {
                     Information info = new Information() { Drzava = parts[1].Trim().ToLower(), Grad = parts[2].Trim().ToLower(), Starost = short.Parse(parts[3]), MesecnaPrimanja = Double.Parse(parts[4]), Year = parts[5].Trim() };
                     DbList[parts[0]].Add(info.Id, info);
-                    return "New entity successfully inserted.\n";
+                    return $"New entity successfully inserted in database '{parts[0]}'.\n";
                 }
                 else
                 {

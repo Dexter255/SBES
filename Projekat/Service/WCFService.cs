@@ -43,17 +43,22 @@ namespace Service
         #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
-            Debugger.Launch();
+            //Debugger.Launch();
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
 
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
             {
                 factory.AuthorizationSuccess(clientName);
-                
-                return db.CreateDatabase(databaseName);
+
+                string information = db.CreateDatabase(databaseName);
+                factory.UserOperation(clientName, "Create database", information);
+
+                return information;
             }
             else
             {
+                factory.AuthorizationFailed(clientName, "Not authorized to create database.");
+
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
             }
@@ -61,12 +66,21 @@ namespace Service
 
         public string DeleteDatabase(string databaseName)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
-                return db.DeleteDatabase(databaseName);
+                factory.AuthorizationSuccess(clientName);
+
+                string information = db.DeleteDatabase(databaseName);
+                factory.UserOperation(clientName, "Delete database", information);
+
+                return information;
             }
             else
             {
+                factory.AuthorizationFailed(clientName, "Not authorized to delete database.");
+
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
             }
@@ -76,12 +90,21 @@ namespace Service
         #region Modifier's operations
         public string Edit(string message, byte[] signature)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
-                return db.Edit(message, signature);
+                factory.AuthorizationSuccess(clientName);
+
+                string information = db.Edit(message, signature);
+                factory.UserOperation(clientName, "Edit entity", information);
+
+                return information;
             }
             else
             {
+                factory.AuthorizationFailed(clientName, "Not authorized to edit entity in database.");
+
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
             }
@@ -89,12 +112,21 @@ namespace Service
 
         public string Insert(string message, byte[] signature)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
-                return db.Insert(message, signature);
+                factory.AuthorizationSuccess(clientName);
+
+                string information = db.Insert(message, signature);
+                factory.UserOperation(clientName, "Insert new entity", information);
+
+                return information;
             }
             else
             {
+                factory.AuthorizationFailed(clientName, "Not authorized to insert new entity in database.");
+
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
             }
@@ -104,26 +136,57 @@ namespace Service
         #region Viewer's operations
         public byte[] ViewAll(string databaseName)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+            factory.AuthorizationSuccess(clientName);
+
+            string information = $"Got 'em all";
+            factory.UserOperation(clientName, $"Get all entities from database '{databaseName}'", information);
+
             return db.ViewAll(databaseName);
+
         }
 
         public byte[] ViewMaxPayed(string databaseName)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+            factory.AuthorizationSuccess(clientName);
+
+            string information = $"Got 'em all";
+            factory.UserOperation(clientName, $"Get max salary from all states from database '{databaseName}'", information);
+
             return db.ViewMaxPayed(databaseName);
         }
 
         public byte[] AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+            factory.AuthorizationSuccess(clientName);
+
+            string information = $"Got 'em all";
+            factory.UserOperation(clientName, $"Get average salary by city and age from database '{databaseName}'", information);
+
             return db.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
         }
 
         public byte[] AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+            factory.AuthorizationSuccess(clientName);
+
+            string information = $"Got 'em all";
+            factory.UserOperation(clientName, $"Get average salary by country and payday from database '{databaseName}'", information);
+
             return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
         }
 
         public byte[] ViewDatabasesNames()
         {
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+            factory.AuthorizationSuccess(clientName);
+
+            string information = $"Got 'em all";
+            factory.UserOperation(clientName, $"Get databases names", information);
+
             return db.ViewDatabasesNames();
         }
 

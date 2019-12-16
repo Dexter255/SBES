@@ -14,12 +14,12 @@ namespace Logger
     {
 
         private static EventLog customLog = null;
-        const string SourceName = "Logger.WCFLogger";
-        const string LogName = "MySecTest";
+        const string SourceName = "LoggedData";
+        const string LogName = "Application";
 
         static WCFLogger()
         {
-            Debugger.Launch();
+            //Debugger.Launch();
             try
             {
                 if (!EventLog.SourceExists(SourceName))
@@ -67,7 +67,7 @@ namespace Logger
         {
             if (customLog != null)
             {
-                string message = $"User '{userName}': authentification failed! Try to access service 'wcfService'" + Environment.NewLine + $"Reason: {reason}";
+                string message = $"User '{userName}': authentification failed! Tride to access service 'wcfService'" + Environment.NewLine + $"Reason: {reason}";
                 customLog.WriteEntry(message);
             }
             else
@@ -78,7 +78,7 @@ namespace Logger
 
         public void AuthorizationSuccess(string userName)
         {
-            Debugger.Launch();
+            //Debugger.Launch();
             if (customLog != null)
             {
                 string message = $"User '{userName}': authorization success!" + Environment.NewLine;
@@ -90,29 +90,17 @@ namespace Logger
             }
         }
 
-        public void UserOperationFailed(string userName, string operation, string reason)
+        public void UserOperation(string userName, string method, string information)
         {
+            //Debugger.Launch();
             if (customLog != null)
             {
-                string message = $"User '{userName}': {operation} failed!" + Environment.NewLine + $"Reason: {reason}";
+                string message = $"User '{userName}' called:\nMethod: {method}\nInformation: {information}";
                 customLog.WriteEntry(message);
             }
             else
             {
-                throw new ArgumentException($"Error while trying to write event {operation} to event log.");
-            }
-        }
-
-        public void UserOperationSuccess(string userName, string operation)
-        {
-            if (customLog != null)
-            {
-                string message = $"User '{userName}': {operation} success!" + Environment.NewLine;
-                customLog.WriteEntry(message);
-            }
-            else
-            {
-                throw new ArgumentException($"Error while trying to write event {operation} to event log.");
+                throw new ArgumentException($"Error while trying to write event {method} to event log.");
             }
         }
 
@@ -124,8 +112,5 @@ namespace Logger
                 customLog = null;
             }
         }
-
-
-
     }
 }

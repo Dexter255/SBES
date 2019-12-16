@@ -19,8 +19,6 @@ namespace Contracts
         [OperationContract]
         void AuthorizationFailed(string userName, string reason);
         [OperationContract]
-        void UserOperationSuccess(string userName, string operation);
-        [OperationContract]
-        void UserOperationFailed(string userName, string operation, string reason);
+        void UserOperation(string userName, string method, string information);
     }
 }
