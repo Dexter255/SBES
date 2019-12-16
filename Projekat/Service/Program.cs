@@ -46,6 +46,17 @@ namespace Service
             policies.Add(new CustomPolicy());
             serviceHost.Authorization.ExternalAuthorizationPolicies = policies.AsReadOnly();
 
+            
+            ///////////////////////// LOGGER /////////////////////////
+            NetTcpBinding bindingLogger = new NetTcpBinding();
+            bindingLogger.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+            string addressLogger = "net.tcp://localhost:10000/WCFLogger";
+            EndpointAddress endpointAddress = new EndpointAddress(new Uri(addressLogger));
+
+            //WCFService proxy = new WCFService(binding, endpointAddress);
+            //////////////////////////////////////////////////////////
+            
+            WCFService.InitializeService(bindingLogger, endpointAddress);
             serviceHost.Open();
             Console.WriteLine("WCFService is opened. Press <enter> to finish and save databases...");
             Console.ReadLine();
@@ -53,7 +64,6 @@ namespace Service
             serviceHost.Close();
 
             db.SerializeData();
-
         }
     }
 }

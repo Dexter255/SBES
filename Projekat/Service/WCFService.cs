@@ -13,9 +13,28 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class WCFService : IWCFService
+    public class WCFService : ChannelFactory<IWCFLogger>, IWCFService
     {
+        static private IWCFLogger factory;
+
         private WCFDatabase db = WCFDatabase.InitializeDb();
+        private WCFService(NetTcpBinding binding, EndpointAddress address)
+            : base(binding, address)
+        {
+            factory = this.CreateChannel();
+        }
+
+        public static IWCFLogger InitializeService(NetTcpBinding binding, EndpointAddress address)
+        {
+            if (factory == null)
+            {
+                var service = new WCFService(binding, address);
+                //factory = service.factory;
+            }
+
+            return factory;
+        }
+
         public WCFService()
         {
 
@@ -24,9 +43,13 @@ namespace Service
         #region Admin's operations
         public string CreateDatabase(string databaseName)
         {
-            //Debugger.Launch();
+            Debugger.Launch();
+            string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
+
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
             {
+                factory.AuthorizationSuccess(clientName);
+                
                 return db.CreateDatabase(databaseName);
             }
             else
