@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using WCFService_Client;
 
 namespace Manager
 {
@@ -43,7 +44,12 @@ namespace Manager
 
             List<IIdentity> identities = obj as List<IIdentity>;
             if (obj == null || identities.Count <= 0)
+            {
+                WCFServiceLoggerConnection.Factory.AutentificationFailed(identities[0].Name.Split(',', ';')[0].Split('=')[1]);
                 return false;
+            }
+
+            WCFServiceLoggerConnection.Factory.AutentificationSuccess(identities[0].Name.Split(',', ';')[0].Split('=')[1]);
 
             evaluationContext.Properties["Principal"] = new CustomPrincipal(identities[0]);
             return true;

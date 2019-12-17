@@ -2,6 +2,7 @@
 using Manager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Policy;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -11,6 +12,7 @@ using System.ServiceModel.Description;
 using System.ServiceModel.Security;
 using System.Text;
 using System.Threading.Tasks;
+using WCFService_Client;
 
 namespace Service
 {
@@ -18,7 +20,7 @@ namespace Service
     {
         static void Main(string[] args)
         {
-
+            //Debugger.Launch();
             WCFDatabase db = WCFDatabase.InitializeDb();
 
             //uzmemo username od servera kako bismo uzeli certificate uz pomoc toga
@@ -50,18 +52,17 @@ namespace Service
             policies.Add(new CustomPolicy());
             serviceHost.Authorization.ExternalAuthorizationPolicies = policies.AsReadOnly();
 
-            
+            serviceHost.Description.Behaviors.Remove<ServiceSecurityAuditBehavior>();
             ///////////////////////// LOGGER /////////////////////////
             NetTcpBinding bindingLogger = new NetTcpBinding();
             bindingLogger.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
             string addressLogger = "net.tcp://localhost:10000/WCFLogger";
             EndpointAddress endpointAddress = new EndpointAddress(new Uri(addressLogger));
-
-
-            //WCFService proxy = new WCFService(binding, endpointAddress);
             //////////////////////////////////////////////////////////
 
-            WCFService.InitializeService(bindingLogger, endpointAddress);
+
+            WCFServiceLoggerConnection.InitializeService(bindingLogger, endpointAddress);
+
             serviceHost.Open();
             Console.WriteLine("WCFService is opened. Press <enter> to finish and save databases...");
             Console.ReadLine();

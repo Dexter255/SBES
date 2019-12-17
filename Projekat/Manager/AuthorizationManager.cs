@@ -6,6 +6,7 @@ using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using WCFService_Client;
 
 namespace Manager
 {
@@ -23,7 +24,13 @@ namespace Manager
             //Debugger.Launch();
             IPrincipal customPrincipal = operationContext.ServiceSecurityContext.AuthorizationContext.Properties["Principal"] as CustomPrincipal;
 
-            return customPrincipal.IsInRole("View");
+            if (!customPrincipal.IsInRole("View"))
+            {
+                WCFServiceLoggerConnection.Factory.AuthorizationFailed(customPrincipal.Identity.Name.Split(',', ';')[0].Split('=')[1], "Not authorized");
+                return false;
+            }
+
+            return true;
         }
     }
 }

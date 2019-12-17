@@ -10,31 +10,14 @@ using System.ServiceModel.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WCFService_Client;
 
 namespace Service
 {
     public class WCFService : ChannelFactory<IWCFLogger>, IWCFService
     {
-        static private IWCFLogger factory;
-
         private WCFDatabase db = WCFDatabase.InitializeDb();
-        private WCFService(NetTcpBinding binding, EndpointAddress address)
-            : base(binding, address)
-        {
-            factory = this.CreateChannel();
-        }
-
-        public static IWCFLogger InitializeService(NetTcpBinding binding, EndpointAddress address)
-        {
-            if (factory == null)
-            {
-                var service = new WCFService(binding, address);
-                //factory = service.factory;
-            }
-
-            return factory;
-        }
-
+        
         public WCFService()
         {
 
@@ -48,16 +31,16 @@ namespace Service
 
             if (Thread.CurrentPrincipal.IsInRole("CreateDB"))
             {
-                factory.AuthorizationSuccess(clientName);
+                WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
                 string information = db.CreateDatabase(databaseName);
-                factory.UserOperation(clientName, "Create database", information);
+                WCFServiceLoggerConnection.Factory.UserOperation(clientName, "Create database", information);
 
                 return information;
             }
             else
             {
-                factory.AuthorizationFailed(clientName, "Not authorized to create database.");
+                WCFServiceLoggerConnection.Factory.AuthorizationFailed(clientName, "Not authorized to create database.");
 
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
@@ -70,16 +53,16 @@ namespace Service
 
             if (Thread.CurrentPrincipal.IsInRole("DeleteDB"))
             {
-                factory.AuthorizationSuccess(clientName);
+                WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
                 string information = db.DeleteDatabase(databaseName);
-                factory.UserOperation(clientName, "Delete database", information);
+                WCFServiceLoggerConnection.Factory.UserOperation(clientName, "Delete database", information);
 
                 return information;
             }
             else
             {
-                factory.AuthorizationFailed(clientName, "Not authorized to delete database.");
+                WCFServiceLoggerConnection.Factory.AuthorizationFailed(clientName, "Not authorized to delete database.");
 
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
@@ -94,16 +77,16 @@ namespace Service
 
             if (Thread.CurrentPrincipal.IsInRole("Edit"))
             {
-                factory.AuthorizationSuccess(clientName);
+                WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
                 string information = db.Edit(message, signature);
-                factory.UserOperation(clientName, "Edit entity", information);
+                WCFServiceLoggerConnection.Factory.UserOperation(clientName, "Edit entity", information);
 
                 return information;
             }
             else
             {
-                factory.AuthorizationFailed(clientName, "Not authorized to edit entity in database.");
+                WCFServiceLoggerConnection.Factory.AuthorizationFailed(clientName, "Not authorized to edit entity in database.");
 
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
@@ -116,16 +99,16 @@ namespace Service
 
             if (Thread.CurrentPrincipal.IsInRole("Insert"))
             {
-                factory.AuthorizationSuccess(clientName);
+                WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
                 string information = db.Insert(message, signature);
-                factory.UserOperation(clientName, "Insert new entity", information);
+                WCFServiceLoggerConnection.Factory.UserOperation(clientName, "Insert new entity", information);
 
                 return information;
             }
             else
             {
-                factory.AuthorizationFailed(clientName, "Not authorized to insert new entity in database.");
+                WCFServiceLoggerConnection.Factory.AuthorizationFailed(clientName, "Not authorized to insert new entity in database.");
 
                 throw new FaultException<SecurityAccessDeniedException>(new SecurityAccessDeniedException(),
                     new FaultReason("Not authorized.\n"));
@@ -137,10 +120,10 @@ namespace Service
         public byte[] ViewAll(string databaseName)
         {
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
-            factory.AuthorizationSuccess(clientName);
+            WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
             string information = $"Got 'em all";
-            factory.UserOperation(clientName, $"Get all entities from database '{databaseName}'", information);
+            WCFServiceLoggerConnection.Factory.UserOperation(clientName, $"Get all entities from database '{databaseName}'", information);
 
             return db.ViewAll(databaseName);
 
@@ -149,10 +132,10 @@ namespace Service
         public byte[] ViewMaxPayed(string databaseName)
         {
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
-            factory.AuthorizationSuccess(clientName);
+            WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
             string information = $"Got 'em all";
-            factory.UserOperation(clientName, $"Get max salary from all states from database '{databaseName}'", information);
+            WCFServiceLoggerConnection.Factory.UserOperation(clientName, $"Get max salary from all states from database '{databaseName}'", information);
 
             return db.ViewMaxPayed(databaseName);
         }
@@ -160,10 +143,10 @@ namespace Service
         public byte[] AverageSalaryByCityAndAge(string databaseName, String city, short fromAge, short toAge)
         {
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
-            factory.AuthorizationSuccess(clientName);
+            WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
             string information = $"Got 'em all";
-            factory.UserOperation(clientName, $"Get average salary by city and age from database '{databaseName}'", information);
+            WCFServiceLoggerConnection.Factory.UserOperation(clientName, $"Get average salary by city and age from database '{databaseName}'", information);
 
             return db.AverageSalaryByCityAndAge(databaseName, city, fromAge, toAge);
         }
@@ -171,10 +154,10 @@ namespace Service
         public byte[] AverageSalaryByCountryAndPayday(string databaseName, String country, String payDay)
         {
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
-            factory.AuthorizationSuccess(clientName);
+            WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
             string information = $"Got 'em all";
-            factory.UserOperation(clientName, $"Get average salary by country and payday from database '{databaseName}'", information);
+            WCFServiceLoggerConnection.Factory.UserOperation(clientName, $"Get average salary by country and payday from database '{databaseName}'", information);
 
             return db.AverageSalaryByCountryAndPayday(databaseName, country, payDay);
         }
@@ -182,10 +165,10 @@ namespace Service
         public byte[] ViewDatabasesNames()
         {
             string clientName = ((Thread.CurrentPrincipal as CustomPrincipal).Identity).Name.Split(',', ';')[0].Split('=')[1];
-            factory.AuthorizationSuccess(clientName);
+            WCFServiceLoggerConnection.Factory.AuthorizationSuccess(clientName);
 
             string information = $"Got 'em all";
-            factory.UserOperation(clientName, $"Get databases names", information);
+            WCFServiceLoggerConnection.Factory.UserOperation(clientName, $"Get databases names", information);
 
             return db.ViewDatabasesNames();
         }

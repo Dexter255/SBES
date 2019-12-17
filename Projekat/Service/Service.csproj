@@ -62,6 +62,10 @@
       <Project>{A632FBE0-3CB4-4498-8FB4-772F71E13F71}</Project>
       <Name>Manager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WCFService_Client\WCFService_Client.csproj">
+      <Project>{1B4EC501-05AD-4A2C-9D39-1E4A1CDB09D9}</Project>
+      <Name>WCFService_Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
