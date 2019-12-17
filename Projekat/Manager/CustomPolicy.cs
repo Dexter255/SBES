@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Manager
 {
+    //IAuthorizationComponent -> je komponenta koja pomaze kod autorizacije korisnika
+    //  klasa koja implementira ovaj interfejs ne autorizuje korisnike nego omogucava ServiceAuthorizationManager klasi da to uradi
+    //ServiceAuthorizationManager zove evaluate metodu za svaki AuthorizationPolicy
     public class CustomPolicy : IAuthorizationPolicy
     {
         readonly string id;
@@ -31,7 +34,7 @@ namespace Manager
 
         public bool Evaluate(EvaluationContext evaluationContext, ref object state)
         {
-            //Debugger.Launch();
+            Debugger.Launch();
             // podesava se custom principal i prosledjuje se WindowsIdentity
 
             object obj;

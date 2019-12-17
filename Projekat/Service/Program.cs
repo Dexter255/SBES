@@ -40,7 +40,11 @@ namespace Service
             serviceHost.Description.Behaviors.Remove(typeof(ServiceDebugBehavior));
             serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
 
+
             serviceHost.Authorization.ServiceAuthorizationManager = new AuthorizationManager();
+
+            //polisa sadrzi uslove koje omogucavaju evaluaciju korisnika(da li ima pravo pristupa nekoj metodi)
+            //na osnovu polise radimo proveru
             serviceHost.Authorization.PrincipalPermissionMode = PrincipalPermissionMode.Custom;
             List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>();
             policies.Add(new CustomPolicy());
@@ -53,9 +57,10 @@ namespace Service
             string addressLogger = "net.tcp://localhost:10000/WCFLogger";
             EndpointAddress endpointAddress = new EndpointAddress(new Uri(addressLogger));
 
+
             //WCFService proxy = new WCFService(binding, endpointAddress);
             //////////////////////////////////////////////////////////
-            
+
             WCFService.InitializeService(bindingLogger, endpointAddress);
             serviceHost.Open();
             Console.WriteLine("WCFService is opened. Press <enter> to finish and save databases...");

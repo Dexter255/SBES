@@ -25,7 +25,7 @@ namespace Client
             String clientCertificateCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
 
             //podesavamo u channel factory da mod validacije bude chaintrust i da se revokacija ne proverava (da li je sertifikat povucen -> NoCheck)
-            this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.ChainTrust;
+            this.Credentials.ServiceCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.ChainTrust;
             this.Credentials.ServiceCertificate.Authentication.RevocationMode = X509RevocationMode.NoCheck;
             
             //postavljam i svoj sertifikat (client)

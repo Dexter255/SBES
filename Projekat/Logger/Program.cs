@@ -22,6 +22,8 @@ namespace Logger
             ServiceHost serviceHost = new ServiceHost(typeof(WCFLogger));
             serviceHost.AddServiceEndpoint(typeof(IWCFLogger), binding, address);
             //Debugger.Launch();
+            serviceHost.Description.Behaviors.Remove<ServiceSecurityAuditBehavior>();
+
             ServiceSecurityAuditBehavior newAudit = new ServiceSecurityAuditBehavior();
             newAudit.AuditLogLocation = AuditLogLocation.Application;
             newAudit.ServiceAuthorizationAuditLevel = AuditLevel.SuccessOrFailure;
@@ -29,8 +31,6 @@ namespace Logger
 
             serviceHost.Description.Behaviors.Remove<ServiceSecurityAuditBehavior>();
             serviceHost.Description.Behaviors.Add(newAudit);
-
-
 
             WCFLogger wcfLogger = new WCFLogger();
 

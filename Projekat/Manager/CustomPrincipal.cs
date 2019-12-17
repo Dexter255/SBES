@@ -31,7 +31,7 @@ namespace Manager
 
             string permissions = RBACConfig.ResourceManager.GetString(groupName);
 
-            if (permissions.Contains(permission))
+            if (permissions != null && permissions.Contains(permission))
             {
                 return true;
             }
